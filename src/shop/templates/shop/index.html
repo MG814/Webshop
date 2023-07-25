@@ -67,16 +67,16 @@
                                 </ul>
                                 <ul class="user-login">
                                     <li>
-                                        <a href="#">Sign Out</a>
+                                        <a href="{% url 'logout' %}">Sign Out</a>
                                     </li>
                                 </ul>
                            {% else %}
                                 <ul class="user-login">
                                     <li>
-                                        <a href="#">Sign In</a>
+                                        <a href="{% url 'login' %}">Sign In</a>
                                     </li>
                                     <li>
-                                        <a href="#">Register</a>
+                                        <a href="{% url 'register' %}">Sign Up</a>
                                     </li>
                                 </ul>
                             {% endif %}
