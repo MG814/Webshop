@@ -1,0 +1,64 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <meta charset="UTF-8">
+
+    <title>ShopGrids - Bootstrap 5 eCommerce HTML Template.</title>
+    <meta name="description" content="" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="shortcut icon" type="image/x-icon" href="{% static 'images/favicon.svg' %}" />
+
+    <!-- ========================= CSS here ========================= -->
+    <link rel="stylesheet" href="{% static 'css/authoryzation.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+
+
+</head>
+<body>
+
+    <!-- Start Header Area -->
+    <header class="header navbar-area">
+        <!-- Start Header Middle -->
+        <div class="header-middle">
+            <div class="container">
+                <div class="row align-items-center">
+                    <div class="col-lg-3 col-md-3 col-7">
+                        <!-- Start Header Logo -->
+                        <a class="navbar-brand" href="{% url 'home' %}">
+                            <img src="{% static 'images/logo/logo.svg' %}" alt="Logo">
+                        </a>
+                        <!-- End Header Logo -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- End Header Middle -->
+    </header>
+    <!-- End Header Area -->
+    <div class="auth-user">
+        <main role="main" class="container">
+            <div class="row">
+                <div class="col-md-8">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class = "alert alert-{{ message.tags }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    <div class="legend form-group">
+                        {% block content %}{% endblock %}
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

@@ -1,0 +1,18 @@
+{% extends 'users/base-authentication.html' %}
+{% block content %}
+    <fieldset class="block">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Join!</legend>
+                {{ form.as_p }}
+            </fieldset>
+              <button type="submit" class="btn btn-primary form-group">Sign Up</button>
+        </form>
+        <div class="border-top pt-3">
+            <small class="text-muted form-group">
+                Have an account?<a class="ml-2" href="#">Sign In</a>
+            </small>
+        </div>
+    </fieldset>
+{% endblock %}
