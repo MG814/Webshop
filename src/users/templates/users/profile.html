@@ -1,0 +1,24 @@
+{% extends 'users/base.html' %}
+{% block content %}
+<div class="content-section block">
+    <div class="media">
+        <img class="rounded-circle account-img img-position img-block" src="{{ user.profile.image.url }}">
+        <div class="media-body">
+            <h2 class="account-heading profile-heading">{{ user.username }}</h2>
+            <p class="text-secondary profile-heading">{{ user.email }}</p>
+        </div>
+    </div>
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Profile info</legend>
+            {{ user_form.as_p }}
+            <br>
+            {{ profile_form.as_p }}
+        </fieldset>
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary form-group">Update</button>
+        </div>
+    </form>
+</div>
+{% endblock content %}
