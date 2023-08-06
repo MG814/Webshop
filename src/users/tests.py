@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
 
+from users.models import Profile
+
 
 class TestRegisterView(TestCase):
     def setUp(self) -> None:
@@ -42,3 +44,13 @@ class TestRegisterView(TestCase):
 
         response = self.client.post(self.login_url, {'username': 'testuser', 'password': 'testpassword123'})
         self.assertEqual(response.status_code, 302)
+
+    def test_profile_view(self):
+        profile_url = reverse('profile')
+        self.client.post(self.register_url, data=self.user_data)
+        response = self.client.post(profile_url, {'username': 'testser'})
+        self.assertEqual(response.status_code, 302)
+
+        profile = Profile.objects.first()
+        user = User.objects.first()
+        self.assertEqual(user, profile.user)
