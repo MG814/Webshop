@@ -15,6 +15,11 @@ class TestRegisterView(TestCase):
             'password2': 'testpassword123'
         }
 
+        self.user_data_login = {
+            'username': 'testuser',
+            'password': 'testpassword123',
+        }
+
     def test_register_view(self):
         self.assertEqual(User.objects.count(), 0)
 
@@ -29,3 +34,11 @@ class TestRegisterView(TestCase):
         self.assertEqual(user.email, 'testuser@example.com')
 
         self.assertRedirects(response, self.login_url, status_code=302, target_status_code=200)
+
+    def test_login_view(self):
+        self.client.post(self.register_url, data=self.user_data)
+        response = self.client.get(self.login_url)
+        self.assertContains(response, "You have been successfully signed up!")
+
+        response = self.client.post(self.login_url, {'username': 'testuser', 'password': 'testpassword123'})
+        self.assertEqual(response.status_code, 302)
