@@ -1,14 +1,11 @@
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView
 from django.contrib.messages.views import SuccessMessageMixin
 from django.shortcuts import redirect, render
-from django.urls import reverse_lazy, reverse
+from django.urls import reverse_lazy
 from django.contrib import messages
-from django.utils.decorators import method_decorator
-from django.views.generic import CreateView, FormView, TemplateView
-
+from django.views.generic import CreateView, FormView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import UserRegisterForm, LoginForm, ProfileUpdateForm, UserUpdateForm
-from .models import Profile
 
 
 class RegisterView(SuccessMessageMixin, CreateView):
@@ -23,11 +20,7 @@ class CustomLoginView(LoginView):
     form_class = LoginForm
 
 
-class ProfileView(FormView):
-    template_name = 'users/profile.html'
-    form_class = UserUpdateForm
-
-    @method_decorator(login_required)
+class ProfileView(LoginRequiredMixin, FormView):
     def get(self, request, *args, **kwargs):
         user_form = UserUpdateForm(instance=request.user)
         profile_form = ProfileUpdateForm(instance=request.user.profile)
