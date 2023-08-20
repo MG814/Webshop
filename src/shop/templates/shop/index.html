@@ -112,7 +112,7 @@
                             <div class="product-info">
                                 <span class="category">Watches</span>
                                 <h4 class="title">
-                                    <a href="#">{{ product.title }}</a>
+                                    <a href="{% url 'product-detail' product.id %}">{{ product.title }}</a>
                                 </h4>
                                 <ul class="review">
                                     <li><i class="lni lni-star-filled"></i></li>

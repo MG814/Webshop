@@ -1,5 +1,5 @@
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, TemplateView
+from django.views.generic import CreateView, TemplateView, DetailView
 
 from shop.forms import ProductForm
 from shop.models import Image, Product
@@ -13,6 +13,18 @@ class HomePageView(TemplateView):
 
         context['products'] = Product.objects.all()
         context['images'] = Image.objects.all().distinct('product')
+        return context
+
+
+class DetailPageView(DetailView):
+    model = Product
+    template_name = "shop/products/details.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        images = Image.objects.all()
+        context['images'] = images
+        context['main_images'] = images.distinct('product')
         return context
 
 
