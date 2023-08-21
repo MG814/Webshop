@@ -1,3 +1,5 @@
+import random
+
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import CreateView, TemplateView, DetailView
 
@@ -7,6 +9,20 @@ from shop.models import Image, Product
 
 class HomePageView(TemplateView):
     template_name = "shop/index.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        items = list(Product.objects.all())
+        if len(items) >= 3:
+            random_items = random.sample(items, 3)
+            context['rand_items'] = random_items
+        context['products'] = Product.objects.all()
+        context['images'] = Image.objects.all().distinct('product')
+        return context
+
+
+class UserProductsPageView(TemplateView):
+    template_name = "shop/products/user-products.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
