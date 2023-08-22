@@ -20,6 +20,9 @@
                             {% if img.product.id == product.id %}
                             <div class="product-image">
                                 <img src="{{ img.image.url }}" alt="#" width="300" height="300">
+                                <div class="button">
+                                    <a href="{% url 'product-edit' product.id %}" class="btn my-btn">Edit</a>
+                                </div>
                             </div>
                             {% endif %}
                         {% endfor %}

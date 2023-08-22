@@ -1,9 +1,12 @@
+import os
 import random
 
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.views.generic import CreateView, TemplateView, DetailView
+from django.shortcuts import redirect
+from django.views import View
+from django.views.generic import CreateView, TemplateView, DetailView, UpdateView
 
-from shop.forms import ProductForm
+from shop.forms import ProductForm, EditForm
 from shop.models import Image, Product
 
 
@@ -30,6 +33,34 @@ class UserProductsPageView(TemplateView):
         context['products'] = Product.objects.all()
         context['images'] = Image.objects.all().distinct('product')
         return context
+
+
+class EditProductView(LoginRequiredMixin, UpdateView):
+    model = Product
+    form_class = EditForm
+    template_name = 'shop/products/edit.html'
+    success_url = '/'
+
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context['images'] = Image.objects.all()
+        return context
+
+
+class DeleteImageView(View):
+    def get(self, request, pk, img_id):
+        img = Image.objects.get(pk=img_id)
+        if img.image:
+            if os.path.isfile(img.image.path):
+                os.remove(img.image.path)
+
+        img.delete()
+        return redirect("product-edit", pk=pk)
 
 
 class DetailPageView(DetailView):
