@@ -1,0 +1,35 @@
+{% extends 'users/base.html' %}
+{% load static %}
+{% block content %}
+    <div class="content-section">
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4">Edit Product</legend>
+                {{ form.as_p }}
+            </fieldset>
+            <div class="form-group">
+                <div class="row">
+                    {% for img in images %}
+                        {% if img.product.id == product.id %}
+                            <div class="col-lg-3 col-md-6 col-12">
+                                <!-- Start Single Product -->
+                                    <div class="single-product">
+                                        <div class="product-image">
+                                            <img src="{{ img.image.url }}" class="" alt="#">
+                                            <div class="button">
+                                                <a href="{% url 'product-image-delete' img.product.id img.id  %}" class="btn">Delete</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                <!-- End Single Product -->
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+            <br>
+                <button type="submit" class="btn btn-primary">Edit</button>
+            </div>
+        </form>
+    </div>
+{% endblock %}
