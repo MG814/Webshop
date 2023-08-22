@@ -24,7 +24,6 @@ class ProductForm(ModelForm):
         for each in self.cleaned_data['files']:
             Image.objects.create(product=instance, image=each)
 
-
         return instance
 
 
