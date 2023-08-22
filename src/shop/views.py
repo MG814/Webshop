@@ -1,10 +1,10 @@
 import os
 import random
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
 from django.views import View
-from django.views.generic import CreateView, TemplateView, DetailView, UpdateView
+from django.views.generic import CreateView, TemplateView, DetailView, UpdateView, DeleteView
 
 from shop.forms import ProductForm, EditForm
 from shop.models import Image, Product
@@ -84,3 +84,13 @@ class ProductCreateView(LoginRequiredMixin, CreateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+
+class DeleteProductView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Product
+    template_name = 'shop/products/delete_confirm.html'
+    success_url = '/'
+
+    def test_func(self):
+        product = self.get_object()
+        return self.request.user == product.user

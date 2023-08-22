@@ -2928,12 +2928,7 @@ top: 2px;
 }
 
 .hero-area .hero-slider .single-slider .content {
-  padding: 20px 365px 20px 50px;
-  position: absolute;
-  left: 0;
-  top: 50%;
-  -webkit-transform: translateY(-50%);
-  transform: translateY(-50%);
+padding-top: 150px;
 }
 
 @media only screen and (min-width: 768px) and (max-width: 991px) {
@@ -4854,4 +4849,26 @@ top: 2px;
   .footer .footer-bottom .socila li span {
     display: none;
   }
+}
+
+.img-main-main{
+    float: right;
+}
+
+.my-single-slider{
+  padding: 20px 200px 20px 200px;
+}
+
+.break-word {
+  white-space: normal !important;
+  word-wrap: break-word;
+}
+
+.my-btn{
+  margin-bottom: 12px;
+}
+
+.img-user-product{
+  width: 300px;
+  height: 300px;
 }

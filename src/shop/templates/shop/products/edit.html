@@ -18,7 +18,9 @@
                                         <div class="product-image">
                                             <img src="{{ img.image.url }}" class="" alt="#">
                                             <div class="button">
+                                                {% if images.count > 1 %}
                                                 <a href="{% url 'product-image-delete' img.product.id img.id  %}" class="btn">Delete</a>
+                                                {% endif %}
                                             </div>
                                         </div>
                                     </div>
