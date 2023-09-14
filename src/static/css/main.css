@@ -4868,7 +4868,19 @@ top: 2px;
   margin-bottom: 12px;
 }
 
-.img-user-product{
-  width: 300px;
-  height: 300px;
+.my-padding{
+  padding: 10px 10px 10px 10px;
+}
+
+.my-color-text{
+  color: black;
+}
+
+.add-button{
+  padding: 5px 30px;
+}
+
+.my-margin{
+  margin-left: 200px;
+  margin-right: 200px;
 }

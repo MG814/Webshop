@@ -29,11 +29,11 @@
             {#                                            incididunt ut labore et dolore magna aliqua.</p>#}
                                                     <h3><span>Now Only</span>{{ product.price }}</h3>
                                                     <div class="button">
-                                                        <a href="product-grids.html" class="btn">Shop Now</a>
+                                                        <a href="{% url 'product-detail' product.id %}" class="btn">Shop Now</a>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
-                                                    <img class="img-main-main" src="{{ img.image.url }}" alt="#" width="200" height="200">
+                                                    <img class="img-main-main rounded-3" src="{{ img.image.url }}" alt="#" width="200" height="200">
                                                 </div>
                                              </div>
                                         </div>
@@ -70,10 +70,14 @@
                         {% for img in images %}
                             {% if img.product.id == product.id %}
                             <div class="product-image">
-                                <img src="{{ img.image.url }}" alt="#" width="300" height="300">
-                                <div class="button">
-                                    <a href="product-details.html" class="btn"><i class="lni lni-cart"></i> Add to Cart</a>
-                                </div>
+                                <img src="{{ img.image.url }}" class="rounded-3"  alt="#" width="300" height="300">
+                                <form method="post" action="{% url 'add-to-cart' %}">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="product_id" value="{{ product.id }}">
+                                <button class="button" type="submit">
+                                    <a class="btn"><i class="lni lni-cart"></i> Add to Cart</a>
+                             </button>
+                                    </form>
                             </div>
                             {% endif %}
                         {% endfor %}

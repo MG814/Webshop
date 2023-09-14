@@ -15,3 +15,12 @@ class Image(models.Model):
     image = models.FileField(upload_to='product_pics')
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='images')
 
+
+class Cart(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+
+class ItemInCart(models.Model):
+    quantity = models.PositiveIntegerField(default=1)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE)
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
