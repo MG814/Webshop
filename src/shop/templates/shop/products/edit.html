@@ -1,9 +1,7 @@
 {% extends 'shop/base.html' %}
-{% load static %}
 {% block content %}
-        <main role="main" class="container">
-    <div class="content-section">
-        <form method="POST" enctype="multipart/form-data" class="bg-light-grey my-padding">
+    <main role="main" class="container">
+        <form method="POST" enctype="multipart/form-data" class="bg-light-grey my-padding my-margin">
             {% csrf_token %}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4 my-color-text">Edit Product</legend>
@@ -17,7 +15,7 @@
                                 <!-- Start Single Product -->
                                     <div class="single-product">
                                         <div class="product-image">
-                                            <img src="{{ img.image.url }}" class="rounded-3" alt="#" width="100px" height="300px">
+                                            <img src="{{ img.image.url }}" class="rounded-3" alt="#" height="200px">
                                             {% if images.count > 1 %}
                                             <div class="button">
                                                 <a href="{% url 'product-image-delete' img.product.id img.id  %}" class="btn">Delete</a>
@@ -34,6 +32,5 @@
                 <button type="submit" class="btn btn-primary add-button">Edit</button>
             </div>
         </form>
-    </div>
-        </main>
+    </main>
 {% endblock %}

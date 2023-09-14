@@ -1,7 +1,7 @@
-{% extends 'users/base.html' %}
+{% extends 'shop/base.html' %}
 {% block content %}
-    <div class="content-section">
-        <form method="POST">
+    <main role="main" class="container">
+        <form method="POST" class="bg-light-grey my-padding my-margin">
             {% csrf_token %}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Delete Product</legend>
@@ -12,5 +12,5 @@
                 <a class="btn btn-outline-secondary" href="{% url 'product-user' %}">Cancel</a>
             </div>
         </form>
-    </div>
+    </main>
 {% endblock %}
