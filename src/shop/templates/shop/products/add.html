@@ -1,15 +1,15 @@
-{% extends 'users/base.html' %}
+{% extends 'shop/base.html' %}
 {% block content %}
-    <div class="content-section">
-        <form method="POST" enctype="multipart/form-data">
+    <main role="main" class="container">
+        <form method="POST" enctype="multipart/form-data" class="bg-light-grey my-padding my-margin">
             {% csrf_token %}
             <fieldset class="form-group">
-                <legend class="border-bottom mb-4">Add Product</legend>
+                <legend class="border-bottom mb-4 my-color-text">Add Product</legend>
                 {{ form.as_p }}
             </fieldset>
             <div class="form-group">
-                <button type="submit" class="btn btn-primary">Add</button>
+                <button type="submit" class="btn btn-primary add-button">Add</button>
             </div>
         </form>
-    </div>
+    </main>
 {% endblock %}
