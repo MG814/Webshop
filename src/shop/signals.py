@@ -2,13 +2,8 @@ import os
 
 from django.contrib.auth.models import User
 from django.dispatch import receiver
-from django.db.models.signals import post_delete, post_save
-from shop.models import Image, Cart
-
-
-@receiver(post_delete, sender=Image)
-def delete_images(sender, instance, **kwargs):
-    os.remove(instance.image.path)
+from django.db.models.signals import post_save
+from shop.models import Cart
 
 
 @receiver(post_save, sender=User)

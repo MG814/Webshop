@@ -16,7 +16,7 @@
                 <div class="col-lg-3 col-md-6 col-12">
                     <!-- Start Single Product -->
                         <div class="single-product">
-                        {% for img in images %}
+                        {% for img in main_images %}
                             {% if img.product.id == product.id %}
                             <div class="product-image">
                                 <img src="{{ img.image.url }}" class="rounded-3"  alt="#" width="300" height="300">
