@@ -8,11 +8,12 @@ from django.views import View
 from django.views.generic import CreateView, TemplateView, DetailView, UpdateView, DeleteView, ListView
 
 from shop.forms import ProductForm, EditForm
-from shop.models import Image, Product, Cart, ItemInCart
+from shop.models import Image, Product, Cart, ItemInCart, Review
 from shop.mixins import ExtraContextMixin
 
 
 class HomePageView(ExtraContextMixin, TemplateView):
+    model = Product
     template_name = "shop/index.html"
 
     def get_context_data(self, **kwargs):
@@ -21,6 +22,7 @@ class HomePageView(ExtraContextMixin, TemplateView):
         if len(items) >= 3:
             random_items = random.sample(items, 3)
             context['rand_items'] = random_items
+
         return context
 
 
@@ -80,6 +82,8 @@ class DetailPageView(ExtraContextMixin, DetailView):
         context = super().get_context_data(**kwargs)
         images = Image.objects.all()
         context['images'] = images
+        context['stars'] = range(self.object.avg_reviews)
+        context['empty_stars'] = range(5 - self.object.avg_reviews)
 
         return context
 
@@ -168,3 +172,17 @@ def change_quantity(request):
         item_all.save()
 
         return redirect('user-cart')
+
+
+def review_product(request, pk=None):
+    if request.method == 'POST':
+        review = int(request.POST.get('star_rating'))
+        product_id_from = Product.objects.filter(id=pk).values('id')[0].get('id')
+        user = request.user.id
+        review_all = Review.objects.filter(user_id=user).values_list('product_id', flat=True)
+
+        if product_id_from not in review_all or review_all.count() == 0:
+            review = Review.objects.create(user_id=user, product_id=product_id_from, review=review)
+            review.save()
+
+        return redirect('product-detail', product_id_from)
