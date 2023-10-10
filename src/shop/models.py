@@ -24,6 +24,7 @@ class Image(models.Model):
 
 
 class Cart(models.Model):
+    total_price = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', default='0')
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 

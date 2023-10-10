@@ -6,7 +6,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import CreateView, TemplateView, DetailView, UpdateView, DeleteView, ListView
+from djmoney.money import Money
 
+from shop.context_functions import get_cart_id, summary_price
 from shop.forms import ProductForm, EditForm
 from shop.models import Image, Product, Cart, ItemInCart, Review
 from shop.mixins import ExtraContextMixin
@@ -119,6 +121,16 @@ class CartUserView(ExtraContextMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        user = self.request.user.id
+        cart_id = get_cart_id(user)
+        cart = Cart.objects.get(id=cart_id)
+
+        s = summary_price(cart_id)
+        cart.total_price = s
+        cart.save()
+
+        context['total_price'] = cart.total_price
+
         return context
 
 

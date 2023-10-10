@@ -85,15 +85,17 @@
                     <h5>{{ sum_price }}</h5>
                   </div>
 
-                  <h5 class="text-uppercase mb-3">Shipping</h5>
-
-                  <div class="mb-4 pb-2">
-                    <select class="select">
-                      <option value="1">Standard-Delivery- €5.00</option>
-                      <option value="2">Two</option>
-                      <option value="3">Three</option>
-                      <option value="4">Four</option>
-                    </select>
+                  <div style="border: solid; padding: 10px 0 0 10px; border-radius: 5px">
+                      <h5 class="text-uppercase mb-3">Shipping</h5>
+                        <label class="my-color-text">
+                            <input type="radio" name="delivery" value="option1">
+                                Parcel Locker $5
+                        </label>
+                        <br>
+                        <label class="my-color-text">
+                            <input type="radio" name="delivery" value="option2">
+                                Standard Delivery $10
+                        </label>
                   </div>
 
                   <h5 class="text-uppercase mb-3">Give code</h5>
@@ -109,7 +111,7 @@
 
                   <div class="d-flex justify-content-between mb-5">
                     <h5 class="text-uppercase">Total price</h5>
-                    <h5>€ 137.00</h5>
+                    <h5>$<a id="total_price">{{ total_price.amount }}</a></h5>
                   </div>
 
                   <button type="button" class="btn btn-primary btn-block btn-lg"
@@ -124,4 +126,34 @@
     </div>
   </div>
 </section>
+        <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const radioButtons = document.querySelectorAll('input[type="radio"]');
+            const totalPriceElement = document.getElementById('total_price');
+            let start_price = parseFloat(totalPriceElement.textContent);
+            console.log(start_price);
+            const prices = {
+                option1: 5,
+                option2: 10,
+            };
+
+            function updateTotalPrice(){
+                let selectOption;
+                for (const radioButton of radioButtons) {
+                    if (radioButton.checked) {
+                        selectOption = radioButton.value;
+                        console.log(selectOption);
+                        break;
+                    }
+                }
+                const shippingPrice = parseFloat(prices[selectOption]);
+                totalPriceElement.textContent = (start_price + shippingPrice).toFixed(2);
+            }
+
+            for (const radioButton of radioButtons) {
+                radioButton.addEventListener('click', updateTotalPrice);
+            }
+
+        });
+    </script>
 {% endblock %}
