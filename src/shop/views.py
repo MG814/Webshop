@@ -206,9 +206,9 @@ def review_product(request, pk=None):
         review = int(request.POST.get('star_rating'))
         product_id_from = Product.objects.filter(id=pk).values('id')[0].get('id')
         user = request.user.id
-        review_all = Review.objects.filter(user_id=user).values_list('product_id', flat=True)
+        review_all = list(Review.objects.filter(user_id=user).values_list('product_id', flat=True))
 
-        if product_id_from not in review_all or review_all.count() == 0:
+        if product_id_from not in review_all:
             review = Review.objects.create(user_id=user, product_id=product_id_from, review=review)
             review.save()
 
