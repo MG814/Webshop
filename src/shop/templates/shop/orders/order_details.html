@@ -1,0 +1,41 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+    <main role="main" class="container py-5 h-100">
+        <div class="bg-light-grey my-padding my-margin" style="border-radius: 15px; padding: 20px 20px 20px 20px">
+            <h1 class="fw-bold mb-0 text-black">Order Details</h1>
+            <hr>
+            <div class="progress-track">
+                    <ul id="progressbar">
+                        <li class="step0 active " id="step1">Ordered</li>
+                        <li class="step0 active text-center" id="step2">Shipped</li>
+                        <li class="step0 active text-right" id="step3">On the way</li>
+                        <li class="step0 text-right" id="step4">Delivered</li>
+                    </ul>
+            </div>
+              {% for img in main_images %}
+                {% if item.product.id == img.product.id %}
+                  <hr class="my-4">
+                    FROM: {{ item.product.user.username }}
+                  <div class="row mb-4 d-flex justify-content-between align-items-center" style="margin-top: 10px">
+                    <div class="col-md-2 col-lg-2 col-xl-2">
+                      <img
+                        src="{{ img.image.url }}"
+                        class="img-fluid rounded-3 img-size" alt="#">
+                    </div>
+                    <div class="col-md-3 col-lg-3 col-xl-3">
+                      <h5 class="title">
+                        <a class="text-black mb-0" href="{% url 'product-detail' item.product.id %}">{{ item.product.title }}</a>
+                      </h5>
+                    </div>
+                      <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                          <a id="test">{{ item.quantity }}</a> x {{ item.product.price }}
+                      </div>
+                    <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                        <h6 class="mb-0" id="product">{{ item.sum_one_item }}</h6>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+        </div>
+    </main>
+{% endblock %}

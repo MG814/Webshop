@@ -1,0 +1,60 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+    {% csrf_token %}
+    <main role="main" class="container py-5 h-100">
+        <div class="bg-light-grey my-padding my-margin" style="border-radius: 15px; padding: 20px 20px 20px 20px; margin-bottom: 20px">
+            <h1 class="fw-bold mb-0 text-black">My Orders</h1>
+        </div>
+        {% for order in user_orders %}
+            <div class="bg-light-grey my-padding my-margin" style="border-radius: 15px; padding: 20px 20px 20px 20px; margin-bottom: 20px">
+              {% for item in order.items_in_order.all %}
+                  {% for img in main_images %}
+                      {% if item.product.id == img.product.id %}
+                          <hr class="my-4">
+                            From: {{ item.product.user.username }}
+                          <div class="row mb-4 d-flex justify-content-between align-items-center" style="margin-top: 10px">
+
+                            <div class="col-md-2 col-lg-2 col-xl-2">
+                              <img
+                                src="{{ img.image.url }}"
+                                class="img-fluid rounded-3 img-size" alt="#">
+                            </div>
+                            <div class="col-md-3 col-lg-3 col-xl-3">
+                              <h5 class="title">
+                                <a class="text-black mb-0" href="">{{ item.product.title }}</a>
+                              </h5>
+                            </div>
+                              <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                  {{ item.quantity }} x {{ item.product.price }}
+                              </div>
+                            <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                <h6 class="mb-0" id="product">{{ item.sum_one_item }}</h6>
+                            </div>
+                          </div>
+
+                          <div class="row mb-4 d-flex justify-content-between align-items-center">
+                            <div class="col-md-3 col-lg-3 col-xl-3">
+                                <a href="{% url 'order-details' item.id %}">Details Shopping</a>
+                            </div>
+                              {% for delivery in order.delivery.all %}
+                            <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                Shipping cost {{ delivery.price }}
+                            </div>
+                          {% endfor %}
+                          </div>
+                      {% endif %}
+                  {% endfor %}
+              {% endfor %}
+                <hr>
+                <div class="row mb-4 d-flex justify-content-between align-items-center">
+                    <div class="col-md-3 col-lg-3 col-xl-3">
+                        <h5><a>With shipping</a></h5>
+                    </div>
+                    <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                        <h5>{{ order.price_with_shipping }}<a id="total_price"></a></h5>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </main>
+{% endblock %}

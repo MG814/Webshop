@@ -2,20 +2,17 @@ import os
 import random
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-
 from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import CreateView, TemplateView, DetailView, UpdateView, DeleteView, ListView
-from djmoney.money import Money
 
-from shop.context_functions import get_cart_id, summary_price
 from shop.forms import ProductForm, EditForm
-from shop.models import Image, Product, Cart, ItemInCart, Review
+from shop.models import Image, Product, Cart, ItemInCart, Review, Order
 from shop.mixins import ExtraContextMixin
+from shop.context_functions import summary_price, get_cart_id
 
 
 class HomePageView(ExtraContextMixin, TemplateView):
-    model = Product
     template_name = "shop/index.html"
 
     def get_context_data(self, **kwargs):
@@ -58,7 +55,7 @@ class DeleteImageView(View):
         img = Image.objects.get(pk=img_id)
         img.delete()
 
-        if not img.image == 'default.jpg':
+        if not img.image == 'default_product_pict.jpg':
             os.remove(img.image.path)
 
         return redirect("product-edit", pk=pk)
@@ -86,7 +83,6 @@ class DetailPageView(ExtraContextMixin, DetailView):
         context['images'] = images
         context['stars'] = range(self.object.avg_reviews)
         context['empty_stars'] = range(5 - self.object.avg_reviews)
-
         return context
 
 
@@ -151,6 +147,25 @@ class DeleteCartProductView(View):
         item_in_cart.delete()
 
         return redirect('user-cart')
+
+
+class OrdersView(ExtraContextMixin, TemplateView):
+    template_name = 'shop/orders/orders.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        user = self.request.user.id
+
+        user_orders = Order.objects.filter(user_id=user)
+
+        context['orders'] = user_orders
+
+        return context
+
+
+class OrderDetailsView(ExtraContextMixin, DetailView):
+    model = ItemInCart
+    template_name = 'shop/orders/order_details.html'
 
 
 def add_to_cart(request):
