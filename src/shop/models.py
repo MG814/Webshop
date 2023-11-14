@@ -2,12 +2,17 @@ from django.contrib.auth.models import User
 from django.db import models
 from djmoney.models.fields import MoneyField
 
+SHIPPING = (
+    ('Free', 'Free'),
+    ('Next day air', 'Next day air'),
+)
+
 
 class Product(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=250)
-    description = models.TextField(max_length=500)
-    price = MoneyField(max_digits=14, decimal_places=2, default_currency='USD')
+    description = models.TextField(max_length=500, blank=True)
+    price = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', currency_choices=[('USD', 'USD $')])
     created_at = models.DateTimeField(auto_created=True, auto_now=True)
 
     @property
@@ -28,13 +33,29 @@ class Cart(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
 
+class Order(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    price_with_shipping = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', default='0', null=True, blank=True)
+
+
 class ItemInCart(models.Model):
     quantity = models.PositiveIntegerField(default=1)
-    product = models.ForeignKey(Product, on_delete=models.CASCADE)
-    cart = models.ForeignKey(Cart, on_delete=models.CASCADE)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='items')
+    cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True, blank=True, related_name='items_in_cart')
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True, related_name='items_in_order')
+
+    @property
+    def sum_one_item(self):
+        return self.product.price * self.quantity
+
+
+class Delivery(models.Model):
+    name = models.CharField(max_length=100, choices=SHIPPING, null=True, blank=True)
+    price = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', null=True, blank=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True, related_name='delivery')
 
 
 class Review(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
     review = models.FloatField(default=0.0)
