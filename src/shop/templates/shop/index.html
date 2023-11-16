@@ -19,14 +19,11 @@
                                             <div class="row">
                                                 <div class="col-sm-8">
                                                     <h2>
-            {#                                              <span>No restocking fee ($35 savings)</span>#}
                                                         {{ product.title }}
                                                     </h2>
                                                     <p>
                                                         <p class="break-word">{{ product.description }}</p>
                                                     </p>
-            {#                                            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor#}
-            {#                                            incididunt ut labore et dolore magna aliqua.</p>#}
                                                     <h3><span>Now Only</span>{{ product.price }}</h3>
                                                     <div class="button">
                                                         <a href="{% url 'product-detail' product.id %}" class="btn">Shop Now</a>
@@ -74,9 +71,9 @@
                                 <form method="post" action="{% url 'add-to-cart' %}">
                                     {% csrf_token %}
                                     <input type="hidden" name="product_id" value="{{ product.id }}">
-                                <button class="button" type="submit">
-                                    <a class="btn"><i class="lni lni-cart"></i> Add to Cart</a>
-                             </button>
+                                <button class="button rounded-3" type="submit">
+                                    <a class="btn my-btn" style="color: white;"><i class="lni lni-cart"></i> Add to Cart</a>
+                                </button>
                                     </form>
                             </div>
                             {% endif %}
@@ -86,6 +83,15 @@
                                 <h4 class="title">
                                     <a href="{% url 'product-detail' product.id %}">{{ product.title }}</a>
                                 </h4>
+                           <ul class="review">
+                                {% for i in stars %}
+                                    <i class="lni lni-star-filled"></i>
+                                {% endfor %}
+
+                                {% for _ in empty_stars %}
+                                    <i class="lni lni-star"></i>
+                                {% endfor %}
+                            </ul>
                                 <div class="price">
                                     <span>{{ product.price }}</span>
                                 </div>

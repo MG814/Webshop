@@ -38,7 +38,7 @@ class Order(models.Model):
     price_with_shipping = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', default='0', null=True, blank=True)
 
 
-class ItemInCart(models.Model):
+class Item(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='items')
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True, blank=True, related_name='items_in_cart')

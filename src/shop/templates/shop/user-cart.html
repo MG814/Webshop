@@ -11,18 +11,14 @@
                 <div class="p-5">
                   <div class="d-flex justify-content-between align-items-center mb-5">
                     <h1 class="fw-bold mb-0 text-black">Shopping Cart</h1>
-                    <h6 class="mb-0 text-muted">{{ cart_count }} items</h6>
+                    <h6 class="mb-0 text-muted">{{ user_cart.items_in_cart.count }} items</h6>
                   </div>
-                  {% for product in products %}
-                    {% for pr in cart_products_id %}
+                    {% for item in user_cart.items_in_cart.all %}
                       {% for img in main_images %}
-
-                        {% if product.id == img.product.id and product.id == pr %}
+                        {% if item.product.id == img.product.id %}
                           <hr class="my-4">
-                       ID : {{ product.id }}
+                       ID : {{ item.product.id }}
                           <div class="row mb-4 d-flex justify-content-between align-items-center">
-                              {% for itc in cart_item %}
-                              {% if itc.product_id == product.id %}
                             <div class="col-md-2 col-lg-2 col-xl-2">
                               <img
                                 src="{{ img.image.url }}"
@@ -30,7 +26,7 @@
                             </div>
                             <div class="col-md-3 col-lg-3 col-xl-3">
                               <h5 class="title">
-                                <a class="text-black mb-0" href="{% url 'product-detail' product.id %}">{{ product.title }}</a>
+                                <a class="text-black mb-0" href="{% url 'product-detail' item.product.id %}">{{ item.product.title }}</a>
                               </h5>
                             </div>
                             <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
@@ -39,36 +35,33 @@
 
                               <button class="btn btn-link px-2" type="submit">
                                           <i class="fas fa-minus">
-                                  <input type="hidden" name="product_id" value="{{ itc.id }}">
+                                  <input type="hidden" name="product_id" value="{{ item.id }}">
                                       <input type="hidden" name="operation" value="minus">
                                           </i>
                              </button>
                                 </form>
                                 <form method="post" action="{% url 'change-quantity' %}">
                                     {% csrf_token %}
-                                      {{ itc.quantity }}
+                                      {{ item.quantity }}
                                     <button class="btn btn-link px-2" type="submit">
                                   <i class="fas fa-plus">
-                                      <input type="hidden" name="product_id" value="{{ itc.id }}">
+                                      <input type="hidden" name="product_id" value="{{ item.id }}">
                                       <input type="hidden" name="operation" value="plus">
                                   </i>
                               </button>
                                 </form>
                             </div>
                             <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                              <h6 class="mb-0">{{ product.price }}</h6>
+                              <h6 class="mb-0">{{ item.product.price }}</h6>
                             </div>
                             <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                              <a href="{% url 'product-cart-delete' product.id %}" class="text-muted"><i class="fas fa-times"></i></a>
+                              <a href="{% url 'product-cart-delete' item.product.id %}" class="text-muted"><i class="fas fa-times"></i></a>
                             </div>
-                                  {% endif %}
-                                  {% endfor %}
                           </div>
                         {% endif %}
 
                       {% endfor %}
                     {% endfor %}
-                  {% endfor %}
                   <div class="pt-5">
                     <h6 class="mb-0"><a href="{% url 'home' %}" class="text-body"><i
                           class="fas fa-long-arrow-alt-left me-2"></i>Back to shop</a></h6>
@@ -81,21 +74,8 @@
                   <hr class="my-4">
 
                   <div class="d-flex justify-content-between mb-4">
-                    <h5 class="text-uppercase">{{ cart_count }} items</h5>
+                    <h5 class="text-uppercase">{{ user_cart.items_in_cart.count }} items</h5>
                     <h5>{{ sum_price }}</h5>
-                  </div>
-
-                  <div style="border: solid; padding: 10px 0 0 10px; border-radius: 5px">
-                      <h5 class="text-uppercase mb-3">Shipping</h5>
-                        <label class="my-color-text">
-                            <input type="radio" name="delivery" value="option1">
-                                Parcel Locker $5
-                        </label>
-                        <br>
-                        <label class="my-color-text">
-                            <input type="radio" name="delivery" value="option2">
-                                Standard Delivery $10
-                        </label>
                   </div>
 
                   <h5 class="text-uppercase mb-3">Give code</h5>
@@ -106,17 +86,26 @@
                       <label class="form-label" for="form3Examplea2">Enter your code</label>
                     </div>
                   </div>
+                      <div style="border: solid; padding: 10px 0 0 10px; border-radius: 5px; margin-bottom: 20px">
+                        <h5 class="text-uppercase mb-3">Shipping</h5>
+                        <label class="my-color-text">
+                          <input type="radio" name="shipping" value="Free" required>
+                            Free shipping $0
+                        </label>
+                        <br>
+                        <label class="my-color-text">
+                          <input type="radio" name="shipping" value="Next_day_air" required>
+                            Next day air $15
+                        </label>
+                      </div>
+                      <hr class="my-4">
 
-                  <hr class="my-4">
-
-                  <div class="d-flex justify-content-between mb-5">
-                    <h5 class="text-uppercase">Total price</h5>
-                    <h5>$<a id="total_price">{{ total_price.amount }}</a></h5>
-                  </div>
-
-                  <button type="button" class="btn btn-primary btn-block btn-lg"
-                    data-mdb-ripple-color="dark">Register</button>
-
+                      <div class="d-flex justify-content-between mb-5">
+                        <h5 class="text-uppercase">Total price</h5>
+                        <h5>$<a id="total_price">{{ total_price.amount }}</a></h5>
+                      </div>
+                      <button style="padding: 5px 30px" type="submit" class="btn btn-primary btn-block btn-lg"
+                                data-mdb-ripple-color="dark">Next</button>
                 </div>
               </div>
             </div>
@@ -133,8 +122,8 @@
             let start_price = parseFloat(totalPriceElement.textContent);
             console.log(start_price);
             const prices = {
-                option1: 5,
-                option2: 10,
+                Free: 0,
+                Next_day_air: 15,
             };
 
             function updateTotalPrice(){

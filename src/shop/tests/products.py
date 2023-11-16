@@ -1,11 +1,9 @@
-import mock
 import PIL.Image
 from django.core.files.base import File
 from io import BytesIO
 
 from django.test import TestCase
 from django.test import tag
-from django.test import override_settings
 
 from django.urls import reverse
 from decimal import Decimal
