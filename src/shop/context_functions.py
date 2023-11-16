@@ -1,5 +1,6 @@
 from unicodedata import decimal
 
+from users.models import Address
 from .models import Image, Order, Cart
 
 
@@ -28,3 +29,9 @@ def get_main_images():
     main_images = images.distinct('product')
 
     return main_images
+
+
+def get_user_address(user_id):
+    if Address.objects.filter(user_id=user_id).exists():
+        address = Address.objects.filter(user_id=user_id).values()[0]
+        return address

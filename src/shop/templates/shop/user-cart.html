@@ -85,7 +85,7 @@
                                                 <label class="form-label" for="form3Examplea2">Enter your code</label>
                                             </div>
                                         </div>
-                                        <form method="post" action='{% url 'create-checkout-session' %}'>
+                                        <form method="post" action={{ site }}>
                                             {% csrf_token %}
                                             <div style="border: solid;
                                                         padding: 10px 0 0 10px;

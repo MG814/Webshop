@@ -1,11 +1,12 @@
 from django.shortcuts import redirect
+from django.urls import reverse_lazy
 from django.views import View
 from django.views.generic import ListView
-from moneyed import Money
 
-from shop.models import Product, Cart, Item, Review
+from shop.models import Product, Cart, Item
 from shop.mixins import ExtraContextMixin
 from shop.context_functions import summary_price, get_user_cart
+from users.models import Address
 
 
 class CartUserView(ExtraContextMixin, ListView):
@@ -16,6 +17,12 @@ class CartUserView(ExtraContextMixin, ListView):
         context = super().get_context_data(**kwargs)
         user = self.request.user.id
         cart = get_user_cart(user)
+        address = Address.objects.filter(user_id=user)
+
+        if address.count() == 0:
+            context['site'] = reverse_lazy('address')
+        else:
+            context['site'] = reverse_lazy('create-checkout-session')
 
         s = summary_price(user)
         cart.total_price = s
@@ -76,22 +83,3 @@ def change_quantity(request):
         item_all.save()
 
         return redirect('user-cart')
-
-
-def total_price_view(request):
-    if request.method == 'POST':
-        user = request.user.id
-        delivery = request.POST.get('delivery')
-        cart = get_user_cart(user)
-
-        cart.total_price = Money('0', 'USD')
-        cart.save()
-
-        if delivery == 'option1':
-            cart.total_price = Money('10', 'USD')
-            cart.save()
-        elif delivery == 'option2':
-            cart.total_price = Money('5', 'USD')
-            cart.save()
-
-    return redirect('user-cart')
