@@ -1,5 +1,5 @@
 from .models import Product
-from .context_functions import get_main_images, summary_price, get_orders, get_user_cart
+from .context_functions import get_main_images, summary_price, get_orders, get_user_cart, get_user_address
 
 
 class ExtraContextMixin:
@@ -11,6 +11,7 @@ class ExtraContextMixin:
         context['products'] = Product.objects.all()
 
         context['sum_price'] = summary_price(user)
+        context['user_address'] = get_user_address(user)
 
         context['user_orders'] = get_orders(user)
         context['user_cart'] = get_user_cart(user)

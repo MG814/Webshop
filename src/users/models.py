@@ -19,3 +19,14 @@ class Profile(models.Model):
 
     def __str__(self):
         return f'Profile of {self.user.username}'
+
+
+class Address(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=50)
+    surname = models.CharField(max_length=50)
+    locality = models.CharField(max_length=25)
+    street = models.CharField(max_length=50)
+    zip_code = models.CharField(max_length=6)
+    phone = models.CharField(max_length=15)
+
