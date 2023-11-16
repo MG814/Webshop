@@ -1,36 +1,26 @@
 from unicodedata import decimal
 
-from .models import ItemInCart, Cart, Image
+from .models import Image, Order, Cart
 
 
-def get_cart_id(user):
-    cart_id = Cart.objects.filter(user_id=user).values('id')[0].get('id')
-    return cart_id
+def get_user_cart(user_id):
+    cart = Cart.objects.filter(user_id=user_id)[0]
+    return cart
 
 
-def get_items_in_cart(cart_id):
-    items_in_cart = ItemInCart.objects.filter(cart_id=cart_id)
-    return items_in_cart
+def get_orders(user_id):
+    orders = Order.objects.filter(user_id=user_id)
+    return orders
 
 
-def summary_price(cart_id):
-    items_in_cart = get_items_in_cart(cart_id)
+def summary_price(user_id):
+    cart = get_user_cart(user_id)
     total_sum = decimal('0')
 
-    for product_in_cart in items_in_cart:
+    for product_in_cart in cart.items_in_cart.all():
         total_sum += (product_in_cart.product.price * product_in_cart.quantity)
 
     return total_sum
-
-
-def cart_products_id(cart_id):
-    id_list = []
-    items_in_cart = get_items_in_cart(cart_id)
-
-    for product_in_cart in items_in_cart:
-        id_list.append(product_in_cart.product.id)
-
-    return id_list
 
 
 def get_main_images():

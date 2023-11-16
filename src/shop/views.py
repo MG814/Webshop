@@ -2,14 +2,16 @@ import os
 import random
 
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+
 from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import CreateView, TemplateView, DetailView, UpdateView, DeleteView, ListView
+from moneyed import Money
 
 from shop.forms import ProductForm, EditForm
-from shop.models import Image, Product, Cart, ItemInCart, Review, Order
+from shop.models import Image, Product, Cart, Item, Review, Order
 from shop.mixins import ExtraContextMixin
-from shop.context_functions import summary_price, get_cart_id
+from shop.context_functions import summary_price, get_user_cart
 
 
 class HomePageView(ExtraContextMixin, TemplateView):
@@ -118,10 +120,9 @@ class CartUserView(ExtraContextMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         user = self.request.user.id
-        cart_id = get_cart_id(user)
-        cart = Cart.objects.get(id=cart_id)
+        cart = get_user_cart(user)
 
-        s = summary_price(cart_id)
+        s = summary_price(user)
         cart.total_price = s
         cart.save()
 
@@ -142,7 +143,7 @@ class CartHomePageView(ExtraContextMixin, ListView):
 class DeleteCartProductView(View):
     def get(self, request, pk):
         product_id = Product.objects.filter(id=pk).values('id')[0].get('id')
-        item_in_cart = ItemInCart.objects.filter(product_id=product_id)
+        item_in_cart = Item.objects.filter(product_id=product_id)
 
         item_in_cart.delete()
 
@@ -164,7 +165,7 @@ class OrdersView(ExtraContextMixin, TemplateView):
 
 
 class OrderDetailsView(ExtraContextMixin, DetailView):
-    model = ItemInCart
+    model = Item
     template_name = 'shop/orders/order_details.html'
 
 
@@ -175,11 +176,11 @@ def add_to_cart(request):
         cart_id = Cart.objects.filter(user_id=user).values('id')[0].get('id')
         product_id = Product.objects.filter(id=product_id_from).values('id')[0].get('id')
 
-        product_id_query_set = ItemInCart.objects.filter(cart_id=cart_id).values('product_id')
+        product_id_query_set = Item.objects.filter(cart_id=cart_id).values('product_id')
         product_id_list = [item.get('product_id') for item in product_id_query_set]
 
         if product_id not in product_id_list:
-            new_item_in_cart = ItemInCart(product_id=product_id, cart_id=cart_id)
+            new_item_in_cart = Item(product_id=product_id, cart_id=cart_id)
             new_item_in_cart.save()
 
         return redirect('user-cart')
@@ -190,7 +191,7 @@ def change_quantity(request):
         product_id_from = request.POST.get('product_id')
         operation = request.POST.get('operation')
 
-        item_all = ItemInCart.objects.get(id=product_id_from)
+        item_all = Item.objects.get(id=product_id_from)
         if operation == 'plus':
             item_all.quantity += 1
         elif operation == 'minus':
@@ -199,6 +200,25 @@ def change_quantity(request):
         item_all.save()
 
         return redirect('user-cart')
+
+
+def total_price_view(request):
+    if request.method == 'POST':
+        user = request.user.id
+        delivery = request.POST.get('delivery')
+        cart = get_user_cart(user)
+
+        cart.total_price = Money('0', 'USD')
+        cart.save()
+
+        if delivery == 'option1':
+            cart.total_price = Money('10', 'USD')
+            cart.save()
+        elif delivery == 'option2':
+            cart.total_price = Money('5', 'USD')
+            cart.save()
+
+    return redirect('user-cart')
 
 
 def review_product(request, pk=None):
