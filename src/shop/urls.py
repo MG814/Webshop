@@ -6,6 +6,7 @@ from .views.cart import CartUserView, DeleteCartProductView, add_to_cart, change
 from .views.products import ProductCreateView, DetailPageView, DeleteProductView, UserProductsPageView, EditProductView, \
     DeleteImageView, review_product
 from .views.orders import OrdersView, OrderDetailsView
+from .views.stripe import notify_stripe_view, CreateCheckoutSessionView
 
 urlpatterns = [
     path('', HomePageView.as_view(), name='home'),
@@ -25,4 +26,7 @@ urlpatterns = [
 
     path('orders/', OrdersView.as_view(), name='orders'),
     path('orders/order/<int:pk>/', OrderDetailsView.as_view(), name='order-details'),
+
+    path('webhook', notify_stripe_view, name='stripe-webhook'),
+    path('create-checkout-session/', CreateCheckoutSessionView.as_view(), name='create-checkout-session'),
 ]
