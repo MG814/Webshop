@@ -1,0 +1,48 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+    <main role="main" class="container py-5 h-100">
+    <div style="margin: auto;">
+        <form method="POST" enctype="multipart/form-data" class="bg-light-grey my-padding my-margin"
+        style="border-radius: 15px">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-4 my-color-text">Address</legend>
+                    <div class="row">
+{#                    {% for field in form  %}#}
+
+                        <div class="col">
+                            <b><i class="fas fa-user" style="margin-right: 10px"></i>
+                                {{ form.name.label_tag }}</b>{{ form.name }}
+                        </div>
+                        <div class="col">
+                            <b><i class="fas fa-user" style="margin: 0 10px 0 10px"></i>
+                                {{ form.surname.label_tag }}</b> {{ form.surname }}
+                        </div>
+                        <div class="col">
+                            <b><i class="fas fa-home" style="margin-right: 10px"></i>
+                                {{ form.locality.label_tag }}</b> {{ form.locality }}
+                        </div>
+                        <div class="col">
+                            <b><i class="fas fa-home" style="margin-right: 10px"></i>
+                                {{ form.street.label_tag }}</b> {{ form.street }}
+                        </div>
+                        <div class="col">
+                            <b><i class="fas fa-home" style="margin-right: 10px"></i>
+                                {{ form.zip_code.label_tag }}</b> {{ form.zip_code }}
+                        </div>
+                        <div class="col-md-5">
+                            <b><i class="fas fa-phone" style="margin-right: 10px"></i>
+                                {{ form.phone.label_tag }}</b> {{ form.phone }}
+                        </div>
+
+{#                    {% endfor %}#}
+                    </div>
+{#                {{ form.as_p }}#}
+            </fieldset>
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary add-button">Save</button>
+            </div>
+        </form>
+    </div>
+    </main>
+{% endblock %}

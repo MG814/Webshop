@@ -1,8 +1,5 @@
-from unicodedata import decimal
-
 from .models import Product
-from .context_functions import get_cart_id, get_items_in_cart, get_main_images, summary_price, \
-    cart_products_id
+from .context_functions import get_main_images, summary_price, get_orders, get_user_cart, get_user_address
 
 
 class ExtraContextMixin:
@@ -10,15 +7,13 @@ class ExtraContextMixin:
         context = super().get_context_data(**kwargs)
         user = self.request.user.id
 
-        cart_id = get_cart_id(user)
-
         context['main_images'] = get_main_images()
         context['products'] = Product.objects.all()
 
-        context['sum_price'] = summary_price(cart_id)
-        context['cart_products_id'] = cart_products_id(cart_id)
-        context['cart_item'] = get_items_in_cart(cart_id).values()
+        context['sum_price'] = summary_price(user)
+        context['user_address'] = get_user_address(user)
 
-        context['cart_count'] = get_items_in_cart(cart_id).count()
+        context['user_orders'] = get_orders(user)
+        context['user_cart'] = get_user_cart(user)
 
         return context

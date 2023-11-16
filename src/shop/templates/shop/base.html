@@ -6,6 +6,7 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
@@ -26,6 +27,7 @@
     <link rel="stylesheet" href="{% static 'css/cart.css' %}" />
     <link rel="stylesheet" href="{% static 'css/main.css' %}" />
     <link rel="stylesheet" href="{% static 'css/profile.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/orders.css' %}" />
 
 
 </head>
@@ -72,28 +74,14 @@
                         <div class="top-end">
                             {% if user.is_authenticated %}
                                 <ul class="user-login">
-                                    <div class="user">
-                                        <li>
-                                            <i class="lni lni-user"></i>
-                                            <a href="{% url 'profile' %}">Hello {{ user.username }}</a>
-                                        </li>
-                                    </div>
-                                </ul>
-                                <ul class="user-login">
-                                    <li>
-                                        <a href="{% url 'product-add' %}">Add product</a>
-                                    </li>
-                                </ul>
-                                <ul class="user-login">
-                                    <li>
-                                        <a href="{% url 'product-user' %}">My products</a>
-                                    </li>
-                                </ul>
-                                <ul class="user-login">
-                                    <li>
-                                        <a href="{% url 'logout' %}">Sign Out</a>
-                                    </li>
-                                </ul>
+                                <select onchange="location = this.value;" class="form-select bg-transparent" style="color: white" aria-label="Default select example">
+                                    <option style="color: black" selected value="1"><a>Hello {{ user.username }}</a></option>
+                                    <option style="color: black" value="{% url 'profile' %}"><a>Account</a></option>
+                                  <option style="color: black" value="{% url 'product-add' %}"><a>Add product</a></option>
+                                  <option style="color: black" value="{% url 'product-user' %}"><a>My products</a></option>
+                                  <option style="color: black" value="{% url 'orders' %}"><a>My orders</a></option>
+                                  <option style="color: black" value="{% url 'logout' %}"><a>Sign Out</a></option>
+                                </select>
                            {% else %}
                                 <ul class="user-login">
                                     <li>
@@ -138,12 +126,14 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div class="search-input">
-                                    <input type="text" placeholder="Search">
-                                </div>
-                                <div class="search-btn">
-                                    <button><i class="lni lni-search-alt"></i></button>
-                                </div>
+                                <form action="/search">
+                                    <div class="search-input">
+                                        <input type="search" name="q">
+                                    </div>
+                                    <div class="search-btn">
+                                        <button><i class="lni lni-search-alt"></i></button>
+                                    </div>
+                                </form>
                             </div>
                             <!-- navbar search Ends -->
                         </div>
@@ -167,39 +157,31 @@
                                 <div class="cart-items">
                                     <a href="{% url 'user-cart' %}" class="main-btn">
                                         <i class="lni lni-cart"></i>
-                                        <span class="total-items">{{ cart_count }}</span>
+                                        <span class="total-items">{{ user_cart.items_in_cart.count }}</span>
                                     </a>
                                     <!-- Shopping Item -->
-
                                     <div class="shopping-item">
                                         <div class="dropdown-cart-header">
                                             <span>{{ cart_count }} Items</span>
                                             <a href="cart.html">View Cart</a>
                                         </div>
-                                        {% for product in products %}
-                                            {% for pr in cart_products_id %}
-                                                {% for img in main_images %}
-                                                    {% if product.id == img.product.id and product.id == pr %}
-                                                        <ul class="shopping-list">
-                                                            <li>
-                                                                <div class="cart-img-head">
-                                                                    <a class="cart-img" href="{% url 'product-detail' product.id %}"><img src="{{ img.image.url }}" alt="#"></a>
-                                                                </div>
-                                                                <div class="content">
-                                                                    <h4><a href="{% url 'product-detail' product.id %}">{{ product.title }}</a></h4>
-                                                                    {% for itc in cart_item %}
-                                                                        {% if itc.product_id == product.id %}
-                                                                            <p class="quantity">{{ itc.quantity }}x - <span class="amount">{{ product.price }}</span></p>
-                                                                        {% endif %}
-                                                                    {% endfor %}
-                                                                </div>
-                                                            </li>
-                                                        </ul>
-                                                    {% endif %}
-                                                {% endfor %}
-                                            {% endfor %}
+                                        {% for item in user_cart.items_in_cart.all %}
+                                          {% for img in main_images %}
+                                            {% if item.product.id == img.product.id %}
+                                                <ul class="shopping-list">
+                                                    <li>
+                                                        <div class="cart-img-head">
+                                                            <a class="cart-img" href="{% url 'product-detail' item.product.id %}"><img src="{{ img.image.url }}" class="img-fluid rounded-3 img-size" alt="#"></a>
+                                                        </div>
+                                                        <div class="content">
+                                                            <h4><a href="{% url 'product-detail' item.product.id %}">{{ item.product.title }}</a></h4>
+                                                            <p class="quantity">{{ item.quantity }}x - <span class="amount">{{ item.product.price }}</span></p>
+                                                        </div>
+                                                    </li>
+                                                </ul>
+                                            {% endif %}
+                                          {% endfor %}
                                         {% endfor %}
-
                                         <div class="bottom">
                                             <div class="total">
                                                 <span>Total</span>
@@ -444,6 +426,7 @@
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/tiny-slider.js' %}"></script>
     <script src="{% static 'js/glightbox.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
     <script src="{% static 'js/main.js' %}"></script>
     <script type="text/javascript">
         //========= Hero Slider
@@ -485,6 +468,17 @@
             }
         });
     </script>
+
+<script type='text/javascript'>
+
+ $(document).ready(function() {
+   $('input[name=delivery1]').change(function(){
+        $('form').submit();
+   });
+  });
+
+</script>
+
 
 </body>
 

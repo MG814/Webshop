@@ -12,6 +12,7 @@
                         <li class="step0 text-right" id="step4">Delivered</li>
                     </ul>
             </div>
+            {% for item in order.items_in_order.all %}
               {% for img in main_images %}
                 {% if item.product.id == img.product.id %}
                   <hr class="my-4">
@@ -36,6 +37,15 @@
                   </div>
                 {% endif %}
               {% endfor %}
+        {% endfor %}
+            <h3>Address to shipping</h3>
+            <hr>
+            <h6 style="margin-bottom: 10px"><p style="color: gray">Name and Surname:</p>
+                {{ user_address.name }} {{ user_address.surname }}</h6>
+            <h6 style="margin-bottom: 10px"><p style="color: gray">Street:</p>{{ user_address.street }}</h6>
+            <h6 style="margin-bottom: 10px"><p style="color: gray">Locality:</p>
+                {{ user_address.zip_code }} {{ user_address.locality }}</h6>
+            <h6 style="margin-bottom: 10px"><p style="color: gray">Phone:</p>{{ user_address.phone }}</h6>
         </div>
     </main>
 {% endblock %}

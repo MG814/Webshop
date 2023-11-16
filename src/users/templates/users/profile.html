@@ -1,24 +1,37 @@
 {% extends 'shop/base.html' %}
 {% block content %}
-<div class="content-section block">
-    <div class="media">
-        <img class="rounded-circle account-img img-position img-block" src="{{ user.profile.image.url }}">
-        <div class="media-body">
-            <h2 class="account-heading profile-heading">{{ user.username }}</h2>
-            <p class="text-secondary profile-heading">{{ user.email }}</p>
+    <main role="main" class="container py-5 h-100">
+        <div class="bg-light-grey my-padding my-margin" style="border-radius: 15px;">
+            <div class="media" style="margin-left: 20px">
+                <img class="rounded-circle account-img img-position img-block" src="{{ user.profile.image.url }}" alt="#">
+                <div class="media-body">
+                    <h2 class="account-heading profile-heading">{{ user.username }}</h2>
+                    <p class="text-secondary profile-heading">{{ user.email }}</p>
+                </div>
+            </div>
+            <form method="POST" enctype="multipart/form-data">
+                {% csrf_token %}
+                <fieldset class="form-group">
+                    <legend class="border-bottom mb-4 my-color-text">Profile info</legend>
+                    {{ user_form.as_p }}
+                    <br>
+                    {{ profile_form.as_p }}
+                </fieldset>
+                    <button type="submit" class="btn btn-primary form-group add-button">Update</button>
+            </form>
         </div>
-    </div>
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
-        <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Profile info</legend>
-            {{ user_form.as_p }}
-            <br>
-            {{ profile_form.as_p }}
-        </fieldset>
-        <div class="form-group">
-            <button type="submit" class="btn btn-primary form-group">Update</button>
+    </main>
+    <main role="main" class="container">
+        <div class="bg-light-grey my-padding my-margin" style="border-radius: 15px; padding: 20px 20px 20px 20px; margin-bottom: 20px">
+            <h3>Address to shipping</h3>
+            <hr>
+            <h6 style="margin-bottom: 10px"><p style="color: gray">Name and Surname:</p>
+                {{ user_address.name }} {{ user_address.surname }}</h6>
+            <h6 style="margin-bottom: 10px"><p style="color: gray">Street:</p>{{ user_address.street }}</h6>
+            <h6 style="margin-bottom: 10px"><p style="color: gray">Locality:</p>
+                {{ user_address.zip_code }} {{ user_address.locality }}</h6>
+            <h6 style="margin-bottom: 10px"><p style="color: gray">Phone:</p>{{ user_address.phone }}</h6>
+            <a href="{% url 'address-edit' user_address.id %}" class="btn btn-primary add-button" style="margin-top: 30px">Edit address</a>
         </div>
-    </form>
-</div>
-{% endblock content %}
+    </main>
+{% endblock %}

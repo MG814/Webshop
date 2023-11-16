@@ -2,10 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from djmoney.models.fields import MoneyField
 
-SHIPPING = (
-    ('Free', 'Free'),
-    ('Next day air', 'Next day air'),
-)
+from django.utils.translation import gettext_lazy as _
 
 
 class Product(models.Model):
@@ -17,10 +14,9 @@ class Product(models.Model):
 
     @property
     def avg_reviews(self):
-        if self.reviews.all().count() != 0:
+        if self.reviews.all().count() > 0:
             return int(sum([review.review for review in self.reviews.all()]) / self.reviews.all().count())
-        else:
-            return 0
+        return 0
 
 
 class Image(models.Model):
@@ -35,10 +31,12 @@ class Cart(models.Model):
 
 class Order(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    price_with_shipping = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', default='0', null=True, blank=True)
+    price_with_shipping = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', default='0', null=True,
+                                     blank=True)
+    created_at = models.DateTimeField(auto_created=True, auto_now_add=True)
 
 
-class ItemInCart(models.Model):
+class Item(models.Model):
     quantity = models.PositiveIntegerField(default=1)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='items')
     cart = models.ForeignKey(Cart, on_delete=models.CASCADE, null=True, blank=True, related_name='items_in_cart')
@@ -50,12 +48,17 @@ class ItemInCart(models.Model):
 
 
 class Delivery(models.Model):
+    SHIPPING = (
+        ('Free', 'Free'),
+        ('Next day air', 'Next day air'),
+    )
+
     name = models.CharField(max_length=100, choices=SHIPPING, null=True, blank=True)
     price = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', null=True, blank=True)
     order = models.ForeignKey(Order, on_delete=models.CASCADE, null=True, blank=True, related_name='delivery')
 
 
 class Review(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
     review = models.FloatField(default=0.0)
