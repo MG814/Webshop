@@ -1,53 +1,6 @@
 {% extends 'shop/base.html' %}
 {% load static %}
 {% block content %}
-    <!-- Start Hero Area -->
-    <section class="hero-area">
-        <div class="container">
-            <div class="slider-head">
-                <!-- Start Hero Slider -->
-                <div class="hero-slider">
-                    <!-- Start Single Slider -->
-                    {% for product in rand_items %}
-                        {% for img in main_images %}
-                            {% if img.product.id == product.id %}
-                                <div class="my-single-slider">
-                                    <div class="single-slider">
-                                        <div class="content">
-                                            <div class="row">
-                                                <div class="col-sm-8">
-                                                    <h2>{{ product.title }}</h2>
-                                                    <p>
-                                                        <p class="break-word">{{ product.description }}</p>
-                                                    </p>
-                                                    <h3>
-                                                        <span>Now Only</span>{{ product.price }}
-                                                    </h3>
-                                                    <div class="button">
-                                                        <a href="{% url 'product-detail' product.id %}" class="btn">Shop Now</a>
-                                                    </div>
-                                                </div>
-                                                <div class="col-sm-4">
-                                                    <img class="img-main-main rounded-3"
-                                                         src="{{ img.image.url }}"
-                                                         alt="#"
-                                                         width="200"
-                                                         height="200">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    {% endfor %}
-                    <!-- End Single Slider -->
-                </div>
-                <!-- End Hero Slider -->
-            </div>
-        </div>
-    </section>
-    <!-- End Hero Area -->
     <!-- Start Trending Product Area -->
     <section class="trending-product section" style="margin-top: 12px;">
         <div class="container">
@@ -63,7 +16,7 @@
                 </div>
             </div>
             <div class="row">
-                {% for product in products %}
+                {% for product in my_search %}
                     <div class="col-lg-3 col-md-6 col-12">
                         <!-- Start Single Product -->
                         <div class="single-product">

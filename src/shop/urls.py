@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views.main import HomePageView
-
+from .views.elasticsearch import ElasticsearchView
 from .views.cart import CartUserView, DeleteCartProductView, add_to_cart, change_quantity
 from .views.products import ProductCreateView, DetailPageView, DeleteProductView, UserProductsPageView, EditProductView, \
     DeleteImageView, review_product
@@ -29,4 +29,6 @@ urlpatterns = [
 
     path('webhook', notify_stripe_view, name='stripe-webhook'),
     path('create-checkout-session/', CreateCheckoutSessionView.as_view(), name='create-checkout-session'),
+
+    path('search/', ElasticsearchView.as_view(), name='search'),
 ]

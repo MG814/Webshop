@@ -13,7 +13,7 @@ class ExtraContextMixin:
         context['sum_price'] = summary_price(user)
         context['user_address'] = get_user_address(user)
 
-        context['user_orders'] = get_orders(user)
+        context['user_orders'] = get_orders(user).order_by('-created_at')
         context['user_cart'] = get_user_cart(user)
 
         return context

@@ -2,14 +2,22 @@ from django.contrib.auth.models import User
 from django.db import models
 from djmoney.models.fields import MoneyField
 
-from django.utils.translation import gettext_lazy as _
-
 
 class Product(models.Model):
+    CATEGORY_CHOICES = (
+        ('Other', 'Other'),
+        ('Beauty', 'Beauty'),
+        ('Electronics', 'Electronics'),
+        ('Fashion', 'Fashion'),
+        ('Home and Garden', 'Home and Garden'),
+        ('Motorization', 'Motorization'),
+    )
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     title = models.CharField(max_length=250)
     description = models.TextField(max_length=500, blank=True)
     price = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', currency_choices=[('USD', 'USD $')])
+    category = models.CharField(max_length=50, choices=CATEGORY_CHOICES, default='')
     created_at = models.DateTimeField(auto_created=True, auto_now=True)
 
     @property
