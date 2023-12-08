@@ -41,6 +41,8 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'djmoney',
+    'django_elasticsearch_dsl',
+    'django_elasticsearch_dsl_drf',
     'django_extensions',
     'django.contrib.admin',
     'django.contrib.auth',
@@ -98,7 +100,7 @@ DATABASES = {
         'NAME': env('NAME'),
         'USER': env('USER'),
         'PASSWORD': env('PASSWORD'),
-        'HOST': env('HOST'),
+        'HOST': 'localhost',
         'PORT': env('PORT')
     }
 }
@@ -128,11 +130,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Poland'
 
 USE_I18N = True
 
 USE_TZ = True
+
 
 
 # Static files (CSS, JavaScript, Images)
@@ -163,3 +166,9 @@ STRIPE_SECRET_KEY = "sk_test_51NzySUByZn9RUiNdTEVtojdOeW1SCqxe4tGJkkLlTLDIOAhCVm
 STRIPE_WEBHOOK_SECRET = ""
 
 ENDPOINT_SECRET = env('ENDPOINT_SECRET')
+
+ELASTICSEARCH_DSL = {
+    'default': {
+        'hosts': 'http://elasticsearch:9200'
+    },
+}

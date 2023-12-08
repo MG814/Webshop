@@ -1,16 +1,23 @@
 import uuid
 
-from django.forms import ModelForm
+from django.forms import ModelForm, Form, ChoiceField
 from multiupload.fields import MultiFileField
 
 from .models import Image, Product
 
 
 def create_images_via_form(cleaned_data, product):
-    if not cleaned_data['files']:
-        Image.objects.create(product=product, image='default_product_pict.jpg')
+    if Image.objects.filter(product_id=product.id).count() != 0:
+        image = Image.objects.filter(product_id=product.id).values('image')[0].get('image')
     else:
-        img = Image.objects.get(image='default_product_pict.jpg')
+        image = None
+
+    if image == 'default_product_pict.jpg' and not cleaned_data['files']:
+        return
+    elif not cleaned_data['files'] and image is None:
+        Image.objects.create(product=product, image='default_product_pict.jpg')
+    elif image == 'default_product_pict.jpg' and cleaned_data['files']:
+        img = Image.objects.filter(product_id=product.id).first()
         img.delete()
 
     for each in cleaned_data['files']:
@@ -22,7 +29,7 @@ def create_images_via_form(cleaned_data, product):
 class ProductForm(ModelForm):
     class Meta:
         model = Product
-        fields = ['title', 'description', 'price']
+        fields = ['title', 'description', 'price', 'category']
 
     files = MultiFileField(min_num=1, max_num=3, max_file_size=1024 * 1024 * 5, required=False)
 
@@ -30,8 +37,14 @@ class ProductForm(ModelForm):
         super().__init__(*args, **kwargs)
 
         self.fields["title"].widget.attrs.update({"class": "form-control"})
+        self.fields['title'].widget.attrs['style'] = 'width:400px; height:40px; margin-bottom: 20px;'
         self.fields["description"].widget.attrs.update({"class": "form-control"})
+        self.fields['description'].widget.attrs['style'] = 'margin-bottom: 20px;'
         self.fields["price"].widget.attrs.update({"class": "form-control"})
+        self.fields['price'].widget.attrs['style'] = 'width:200px; height:40px; margin-bottom: 20px;'
+        self.fields["category"].widget.attrs.update({"class": "form-control"})
+        self.fields['category'].widget.attrs['style'] = 'width:200px; height:40px; margin-bottom: 20px;'
+        self.fields["files"].widget.attrs.update({"class": "form-control-file"})
 
     def save(self, *args, **kwargs):
         instance = super(ProductForm, self).save()
@@ -43,7 +56,7 @@ class ProductForm(ModelForm):
 class EditForm(ModelForm):
     class Meta:
         model = Product
-        fields = ['title', 'description', 'price']
+        fields = ['title', 'description', 'price', 'category']
 
     files = MultiFileField(min_num=1, max_num=3, max_file_size=1024 * 1024 * 5)
 
@@ -51,8 +64,13 @@ class EditForm(ModelForm):
         super().__init__(*args, **kwargs)
 
         self.fields["title"].widget.attrs.update({"class": "form-control"})
+        self.fields['title'].widget.attrs['style'] = 'width:400px; height:40px;'
         self.fields["description"].widget.attrs.update({"class": "form-control"})
+        self.fields['description'].widget.attrs['style'] = 'margin-bottom: 20px;'
         self.fields["price"].widget.attrs.update({"class": "form-control"})
+        self.fields['price'].widget.attrs['style'] = 'width:200px; height:40px; margin-bottom: 20px;'
+        self.fields["category"].widget.attrs.update({"class": "form-control"})
+        self.fields['category'].widget.attrs['style'] = 'width:200px; height:40px; margin-bottom: 20px;'
         self.fields["files"].widget.attrs.update({"class": "form-control-file"})
         self.fields["files"].required = False
 
@@ -60,3 +78,16 @@ class EditForm(ModelForm):
         instance = super(EditForm, self).save()
         create_images_via_form(self.cleaned_data, instance)
         return instance
+
+
+class FilterForm(Form):
+    CATEGORY_CHOICES = (
+        ('Other', 'Other'),
+        ('Beauty', 'Beauty'),
+        ('Electronics', 'Electronics'),
+        ('Fashion', 'Fashion'),
+        ('Home and Garden', 'Home and Garden'),
+        ('Motorization', 'Motorization'),
+    )
+
+    filter_by = ChoiceField(choices=CATEGORY_CHOICES)
