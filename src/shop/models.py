@@ -2,6 +2,8 @@ from django.contrib.auth.models import User
 from django.db import models
 from djmoney.models.fields import MoneyField
 
+from core import settings
+
 
 class Product(models.Model):
     CATEGORY_CHOICES = (
@@ -13,7 +15,7 @@ class Product(models.Model):
         ('Motorization', 'Motorization'),
     )
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     title = models.CharField(max_length=250)
     description = models.TextField(max_length=500, blank=True)
     price = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', currency_choices=[('USD', 'USD $')])
@@ -34,11 +36,11 @@ class Image(models.Model):
 
 class Cart(models.Model):
     total_price = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', default='0')
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
 
 
 class Order(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     price_with_shipping = MoneyField(max_digits=14, decimal_places=2, default_currency='USD', default='0', null=True,
                                      blank=True)
     created_at = models.DateTimeField(auto_created=True, auto_now_add=True)
@@ -67,6 +69,6 @@ class Delivery(models.Model):
 
 
 class Review(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='reviews')
     review = models.FloatField(default=0.0)
