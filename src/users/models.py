@@ -1,10 +1,18 @@
 from PIL import Image
-from django.contrib.auth.models import User
 from django.db import models
+from django.contrib.auth.models import AbstractUser
+from django.conf import settings
+
+
+class User(AbstractUser):
+    role = models.CharField(
+        max_length=6,
+        choices=[('Seller', 'Seller'), ('Buyer', 'Buyer')]
+    )
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpg', upload_to='profile_pics')
 
     def save(self, *args, **kwargs):
@@ -22,7 +30,7 @@ class Profile(models.Model):
 
 
 class Address(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     name = models.CharField(max_length=50)
     surname = models.CharField(max_length=50)
     locality = models.CharField(max_length=25)

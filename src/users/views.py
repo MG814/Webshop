@@ -6,52 +6,65 @@ from django.contrib import messages
 from django.views.generic import CreateView, TemplateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .forms import UserRegisterForm, LoginForm, ProfileUpdateForm, UserUpdateForm, AddressForm, AddressEditForm
+from .forms import (
+    UserRegisterForm,
+    LoginForm,
+    ProfileUpdateForm,
+    UserUpdateForm,
+    AddressForm,
+    AddressEditForm,
+)
 from .models import Address
 from shop.mixins import ExtraContextMixin
 
 
 class RegisterView(SuccessMessageMixin, CreateView):
-    template_name = 'users/login/register.html'
+    template_name = "users/login/register.html"
     form_class = UserRegisterForm
-    success_url = reverse_lazy('login')
+    success_url = reverse_lazy("login")
     success_message = "You have been successfully signed up!"
 
 
 class CustomLoginView(LoginView):
-    template_name = 'users/login/login.html'
+    template_name = "users/login/login.html"
     form_class = LoginForm
 
 
 class ProfileView(ExtraContextMixin, LoginRequiredMixin, TemplateView):
-    template_name = 'users/profile.html'
+    template_name = "users/profile.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         user_form = UserUpdateForm(instance=self.request.user)
         profile_form = ProfileUpdateForm(instance=self.request.user.profile)
-        context['user_form'] = user_form
-        context['profile_form'] = profile_form
+        context["user_form"] = user_form
+        context["profile_form"] = profile_form
         return context
 
     def post(self, request, *args, **kwargs):
         user_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
+        profile_form = ProfileUpdateForm(
+            request.POST, request.FILES, instance=request.user.profile
+        )
 
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
             messages.success(request, "Your profile's been updated!")
-            return redirect('profile')
+            return redirect("profile")
 
-        return render(request, 'users/profile.html', {'user_form': user_form, 'profile_form': profile_form})
+        return render(
+            request,
+            "users/profile.html",
+            {"user_form": user_form, "profile_form": profile_form},
+        )
 
 
 class AddressView(LoginRequiredMixin, CreateView):
     model = Address
     form_class = AddressForm
-    template_name = 'users/address/address.html'
-    success_url = '/cart/'
+    template_name = "users/address/address_add.html"
+    success_url = "/profile/"
 
     def form_valid(self, form):
         form.instance.user = self.request.user
@@ -61,8 +74,8 @@ class AddressView(LoginRequiredMixin, CreateView):
 class AddressEditView(LoginRequiredMixin, UpdateView):
     model = Address
     form_class = AddressEditForm
-    template_name = 'users/address/address_edit.html'
-    success_url = '/cart/'
+    template_name = "users/address/address_edit.html"
+    success_url = "/profile/"
 
     def form_valid(self, form):
         form.instance.user = self.request.user
