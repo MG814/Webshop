@@ -50,6 +50,10 @@ INSTALLED_APPS = [
 INSTALLED_EXTENSION = [
     'users',
     'shop',
+    'searching',
+    'products',
+    'orders',
+    'payments',
 ]
 
 AUTH_USER_MODEL = 'users.User'

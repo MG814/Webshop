@@ -2,12 +2,12 @@ from django.shortcuts import get_object_or_404, redirect
 from django.views import View
 from django.views.generic import TemplateView, DetailView
 
-from shop.models import Order
+from .models import Order
 from shop.mixins import ExtraContextMixin
 
 
 class OrdersView(ExtraContextMixin, TemplateView):
-    template_name = 'shop/orders/orders.html'
+    template_name = 'orders/orders.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -17,16 +17,16 @@ class OrdersView(ExtraContextMixin, TemplateView):
 
 class OrderDetailsView(ExtraContextMixin, DetailView):
     model = Order
-    template_name = 'shop/orders/order_details.html'
+    template_name = 'orders/order_details.html'
 
 
 class ClientsOrderDetailsView(ExtraContextMixin, DetailView):
     model = Order
-    template_name = "shop/orders/clients_order_details.html"
+    template_name = "orders/clients_order_details.html"
 
 
 class ClientsOrdersView(ExtraContextMixin, TemplateView):
-    template_name = "shop/orders/clients_orders.html"
+    template_name = "orders/clients_orders.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()

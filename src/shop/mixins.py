@@ -1,6 +1,7 @@
 from typing import Dict, Any
 
-from .models import Product, Order
+from products.models import Product
+from orders.models import Order
 from .context_functions import get_main_images, summary_price, get_orders, get_user_cart, get_user_address
 
 

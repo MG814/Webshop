@@ -24,4 +24,8 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('shop.urls')),
     path('', include('users.urls')),
+    path('', include('searching.urls')),
+    path('', include('products.urls')),
+    path('', include('orders.urls')),
+    path('', include('payments.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
