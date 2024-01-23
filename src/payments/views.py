@@ -115,6 +115,11 @@ def notify_stripe_view(request):  # notify_stripe
         create_new_delivery(metadata.get("shipping_name"), price_amount, order.id)
         transfer_items_from_cart_to_order(cart, order)
 
+    if event["type"] == 'charge.updated':
+        charge = stripe.Charge.retrieve(
+            event["data"]["object"]["id"],
+        )
+        send_email(receipt_url=charge.get('receipt_url'))
 
     # Passed signature verification
     return HttpResponse(status=200)

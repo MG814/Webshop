@@ -38,6 +38,15 @@ def create_new_delivery(name, price, order_id):
     delivery.save()
 
 
+def send_email(receipt_url):
+    send_mail('GridShop: Successful Payment',
+              f'{receipt_url}',
+              'wenomus@gmail.com',
+              ['keponel538@ziragold.com'],
+              fail_silently=False
+              )
+
+
 def transfer_items_from_cart_to_order(cart, order):
     for item_in_cart in cart.items_in_cart.all():
         item_in_cart.order = order
