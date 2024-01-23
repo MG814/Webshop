@@ -7,25 +7,23 @@
                     <div class="col-md-5 col-lg-5 col-xl-5">
                         <h1 class="fw-bold mb-0 text-black">Order Details</h1>
                     </div>
-                    {% if order.reception_code == '' and order.tracking_number != '' %}
-                        <div class="col-md-3 col-lg-3 col-xl-3">
-                            <form method="post" action="{% url 'receive' order.id %}">
-                                {% csrf_token %}
-                                {% if messages %}
-                                    <ul class="messages">
-                                        {% for message in messages %}
-                                        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                                        {% endfor %}
-                                    </ul>
-                                {% endif %}
-                                <input type="text" name="reception_code">
-                                <button type="submit" class="btn btn-primary add-button" style="margin-top: 10px; margin-left: 35px;">
-                                        <input type="hidden" name="operation" value="order_status">
-                                    Confirm
-                                </button>
-                            </form>
-                        </div>
-                    {% endif %}
+                    <div class="col-md-3 col-lg-3 col-xl-3">
+                        <form method="post" action="{% url 'send' order.id %}">
+                            {% csrf_token %}
+                            {% if messages %}
+                                <ul class="messages">
+                                    {% for message in messages %}
+                                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                    {% endfor %}
+                                </ul>
+                            {% endif %}
+                            <input type="text" name="tracking">
+                            <button type="submit" class="btn btn-primary add-button" style="margin-top: 10px; margin-left: 35px;">
+                                    <input type="hidden" name="operation" value="order_status">
+                                Sending
+                            </button>
+                        </form>
+                    </div>
                 </div>
                 <hr>
                 <div class="progress-track">

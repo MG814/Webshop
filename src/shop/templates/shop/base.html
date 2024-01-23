@@ -68,10 +68,13 @@
                                 <select onchange="location = this.value;" class="form-select bg-transparent" style="color: white" aria-label="Default select example">
                                     <option style="color: black" selected value="1"><a>Hello {{ user.username }}</a></option>
                                     <option style="color: black" value="{% url 'profile' %}"><a>Account</a></option>
-                                  <option style="color: black" value="{% url 'product-add' %}"><a>Add product</a></option>
-                                  <option style="color: black" value="{% url 'product-user' %}"><a>My products</a></option>
-                                  <option style="color: black" value="{% url 'orders' %}"><a>My orders</a></option>
-                                  <option style="color: black" value="{% url 'logout' %}"><a>Sign Out</a></option>
+                                    <option style="color: black" value="{% url 'product-add' %}"><a>Add product</a></option>
+                                    <option style="color: black" value="{% url 'product-user' %}"><a>My products</a></option>
+                                    <option style="color: black" value="{% url 'orders' %}"><a>My orders</a></option>
+                                    {% if user.role == 'Seller' %}
+                                        <option style="color: black" value="{% url 'clients-orders' %}"><a>Clients orders</a></option>
+                                    {% endif %}
+                                    <option style="color: black" value="{% url 'logout' %}"><a>Sign Out</a></option>
                                 </select>
                            {% else %}
                                 <ul class="user-login">
