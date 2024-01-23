@@ -55,10 +55,17 @@
                 <div class="col-12">
                     <div class="section-title">
                         <h2>Products</h2>
-                        <p>
-                            There are many variations of passages of Lorem Ipsum available, but the majority have
-                            suffered alteration in some form.
-                        </p>
+                    </div>
+                    <div class="select-position">
+                        <select class="filters"
+                                style="width: 150px; height: 30px; background-color: white; border-radius: 5px"
+                                id="select1" name="sort" onchange="location = this.value;">
+                            <option selected>Filters</option>
+                            <option class="filter_by" value="?sort=l2hp">Lowest price</option>
+                            <option class="filter_by" value="?sort=h2lp">Highest price</option>
+                            <option class="filter_by" value="?sort=l2hr">Lowest review</option>
+                            <option class="filter_by" value="?sort=h2lr">Highest review</option>
+                        </select>
                     </div>
                 </div>
             </div>
@@ -78,8 +85,8 @@
                                         <form method="post" action="{% url 'add-to-cart' %}">
                                             {% csrf_token %}
                                             <input type="hidden" name="product_id" value="{{ product.id }}">
-                                            <button class="button rounded-3" type="submit">
-                                                <a class="btn my-btn" style="color: white;"><i class="lni lni-cart"></i> Add to Cart</a>
+                                            <button class="button btn rounded-3" type="submit">
+                                                <a class="btn" style="color: white;"><i class="lni lni-cart"></i> Add to Cart</a>
                                             </button>
                                         </form>
                                     </div>
@@ -91,8 +98,8 @@
                                     <a href="{% url 'product-detail' product.id %}">{{ product.title }}</a>
                                 </h4>
                                 <ul class="review">
-                                    {% for i in stars %}<i class="lni lni-star-filled"></i>{% endfor %}
-                                    {% for _ in empty_stars %}<i class="lni lni-star"></i>{% endfor %}
+                                    {% for _ in product.stars %}<i class="lni lni-star-filled"></i>{% endfor %}
+                                    {% for _ in product.empty_stars %}<i class="lni lni-star"></i>{% endfor %}
                                 </ul>
                                 <div class="price">
                                     <span>{{ product.price }}</span>
@@ -154,45 +161,4 @@
         </div>
     </section>
     <!-- End Shipping Info -->
-    <!-- ========================= JS here ========================= -->
-    <script type="text/javascript">
-        //========= Hero Slider
-        tns({
-            container: '.hero-slider',
-            slideBy: 'page',
-            autoplay: true,
-            autoplayButtonOutput: false,
-            mouseDrag: true,
-            gutter: 0,
-            items: 1,
-            nav: false,
-            controls: true,
-            controlsText: ['<i class="lni lni-chevron-left"></i>', '<i class="lni lni-chevron-right"></i>'],
-        });
-
-        //======== Brand Slider
-        tns({
-            container: '.brands-logo-carousel',
-            autoplay: true,
-            autoplayButtonOutput: false,
-            mouseDrag: true,
-            gutter: 15,
-            nav: false,
-            controls: false,
-            responsive: {
-                0: {
-                    items: 1,
-                },
-                540: {
-                    items: 3,
-                },
-                768: {
-                    items: 5,
-                },
-                992: {
-                    items: 6,
-                }
-            }
-        });
-    </script>
 {% endblock %}

@@ -13,12 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import environ
 import os
 from pathlib import Path
-from django.core.management.utils import get_random_secret_key
-
-env = environ.Env(
-    DEBUG=(bool, False),
-    SECRET_KEY=(str, get_random_secret_key())
-)
+from .env import env
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -163,14 +158,22 @@ LOGIN_REDIRECT_URL = 'home'
 
 LOGIN_URL = 'login'
 
-STRIPE_PUBLIC_KEY = "pk_test_51NzySUByZn9RUiNdrYUege6XhoVV8tuXWV7ggwfg51SAJ7q9tII2SdbZo1tEjcAznwFkUo4sNNU1rgJWBCQ4iXZf00zVgIFcFL"
-STRIPE_SECRET_KEY = "sk_test_51NzySUByZn9RUiNdTEVtojdOeW1SCqxe4tGJkkLlTLDIOAhCVmdrl12sL1w4gtInBmEVdbb8YtYPhYtzMdZ5dK7l00Vn295eAE"
+STRIPE_PUBLIC_KEY = env('STRIPE_PUBLIC_KEY')
+STRIPE_SECRET_KEY = env('STRIPE_SECRET_KEY')
 STRIPE_WEBHOOK_SECRET = ""
 
 ENDPOINT_SECRET = env('ENDPOINT_SECRET')
 
 ELASTICSEARCH_DSL = {
     'default': {
-        'hosts': 'http://elasticsearch:9200'
+        'hosts': env('ELASTIC_URL')
     },
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_USE_SSL = False
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = 'wenomus@gmail.com'
+EMAIL_HOST_PASSWORD = 'wxna ynjm xwhr cgbj '
