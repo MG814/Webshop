@@ -3857,6 +3857,7 @@ padding-top: 150px;
 
 .item-details .product-info .wish-button {
   display: inline-block;
+  height: 46px;
   width: 100%;
 }
 
