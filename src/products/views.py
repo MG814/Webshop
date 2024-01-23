@@ -6,8 +6,9 @@ from django.shortcuts import redirect
 from django.views import View
 from django.views.generic import CreateView, TemplateView, DetailView, UpdateView, DeleteView
 
-from shop.forms import ProductForm, EditForm
-from shop.models import Image, Product, Cart
+from products.forms import ProductForm, EditForm
+from products.models import Image, Product
+from shop.models import Cart
 from shop.mixins import ExtraContextMixin
 
 

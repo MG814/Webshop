@@ -1,7 +1,9 @@
 from unicodedata import decimal
 
 from users.models import Address
-from .models import Image, Order, Cart
+from products.models import Image
+from .models import Cart
+from orders.models import Order
 
 
 def get_user_cart(user_id):

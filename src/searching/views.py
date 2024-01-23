@@ -1,12 +1,10 @@
 from typing import Tuple, Dict, Any
-
 from django.views.generic import TemplateView
+from elasticsearch_dsl import Q
 
-from shop.documents import ProductDocument
+from searching.documents import ProductDocument
 from shop.models import Product
 from shop.mixins import ExtraContextMixin
-
-from elasticsearch_dsl import Q
 
 
 class ElasticsearchView(ExtraContextMixin, TemplateView):
