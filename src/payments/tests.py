@@ -1,0 +1,94 @@
+from _decimal import Decimal
+
+from django.test import TestCase
+from django.test import tag
+from django.core import mail
+
+from shop.models import Cart, Item
+from users.models import User
+from orders.models import Order, Delivery
+from payments.functions import (
+    create_new_order,
+    create_new_delivery,
+    transfer_items_from_cart_to_order,
+    send_email,
+    get_shipping_options
+)
+from products.models import Product
+
+
+@tag("payments_functions")
+class TestPaymentsFunctions(TestCase):
+    def setUp(self) -> None:
+        self.user = User.objects.create_user(
+            username="testuser", password="testpassword"
+        )
+        self.user_data = User.objects.create(username='testuser2',
+                                             email='testuser2@wp.pl',
+                                             password="testpassword123",
+                                             role='Seller'
+                                             )
+        self.order = Order.objects.create(user_id=self.user.id,
+                                          seller_id=self.user_data.id,
+                                          price_with_shipping=100
+                                          )
+        self.cart = Cart.objects.filter(user_id=self.user.id)[0]
+
+    def test_create_new_order(self):
+        self.assertEqual(Order.objects.count(), 1)
+        create_new_order(user_id=self.user.id, seller_id=self.user_data.id, cart=self.cart, price_amount=1000)
+        self.assertEqual(Order.objects.count(), 2)
+
+    def test_create_new_delivery(self):
+        self.assertEqual(Delivery.objects.count(), 0)
+        create_new_delivery(name='Free', price=15, order_id=self.order.id)
+        self.assertEqual(Delivery.objects.count(), 1)
+
+    def test_transfer_items_from_cart_to_order(self):
+        product = Product.objects.create(user_id=self.user_data.id,
+                                         title="test",
+                                         description="testtest test",
+                                         price=Decimal("10"),
+                                         category='Other'
+                                         )
+        Item.objects.create(quantity=1, product=product, cart=self.cart,)
+
+        self.assertEqual(self.cart.items_in_cart.count(), 1)
+        self.assertEqual(self.order.items_in_order.count(), 0)
+
+        transfer_items_from_cart_to_order(self.cart, self.order)
+
+        self.assertEqual(self.cart.items_in_cart.count(), 0)
+        self.assertEqual(self.order.items_in_order.count(), 1)
+
+    def test_send_email(self):
+        send_email('test.com')
+        first_message = mail.outbox[0]
+
+        self.assertEqual(first_message.subject, 'GridShop: Successful Payment')
+        self.assertEqual(first_message.body, 'test.com')
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(first_message.from_email, 'wenomus@gmail.com')
+        self.assertEqual(first_message.to, ['keponel538@ziragold.com'])
+
+    def test_get_shipping_options(self):
+        options = get_shipping_options('Next_day', 0.2, 15, 3)
+
+        rate_data = options.get('shipping_rate_data')
+        fixed_amount = rate_data.get('fixed_amount')
+        amount = fixed_amount.get('amount')
+        currency = fixed_amount.get('currency')
+        self.assertEqual(amount, 20)
+        self.assertEqual(currency, 'usd')
+
+        delivery_name = rate_data.get('display_name')
+        self.assertEqual(delivery_name, 'Next day')
+
+        delivery_estimate = rate_data.get('delivery_estimate')
+        maximum = delivery_estimate.get('maximum')
+        maximum_value = maximum.get('value')
+        minimum = delivery_estimate.get('minimum')
+        minimum_value = minimum.get('value')
+        self.assertEqual(maximum_value, 15)
+        self.assertEqual(minimum_value, 3)
+
