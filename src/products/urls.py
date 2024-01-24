@@ -8,7 +8,7 @@ from .views import (
     EditProductView,
     DeleteImageView,
     DeleteWishlistProductView,
-    ReviewProduct,
+    ReviewProduct, WishlistView, AddToWishList,
 )
 
 urlpatterns = [
@@ -19,6 +19,9 @@ urlpatterns = [
     path('product/<int:pk>/delete-image/<int:img_id>/', DeleteImageView.as_view(), name='product-image-delete'),
     path('product/delete/<int:pk>/', DeleteProductView.as_view(), name='product-delete'),
     path('product/review/<int:pk>/', ReviewProduct.as_view(), name='product-review'),
+
+    path("wishlist/", WishlistView.as_view(), name="wishlist"),
+    path("wishlist/product/add/", AddToWishList.as_view(), name="add-to-wishlist"),
     path(
         "wishlist/product/delete/<int:pk>/",
         DeleteWishlistProductView.as_view(),
