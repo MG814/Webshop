@@ -1,0 +1,51 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+    {% csrf_token %}
+    <main role="main" class="container py-5 h-100">
+        <div class="bg-light-grey my-padding my-margin" style="border-radius: 15px; padding: 20px 20px 20px 20px; margin-bottom: 20px">
+            <h1 class="fw-bold mb-0 text-black">My Wishlist</h1>
+        </div>
+        {% for item in wishlist.items_in_wishlist.all %}
+            <div class="bg-light-grey my-padding my-margin" style="border-radius: 15px; padding: 20px 20px 20px 20px; margin-bottom: 20px">
+                  {% for img in main_images %}
+                      {% if item.product.id == img.product.id %}
+                            From: {{ item.product.user.username }}
+                          <div class="row mb-4 d-flex justify-content-between align-items-center" style="margin-top: 10px">
+
+                            <div class="col-md-3 col-lg-3 col-xl-3">
+                              <img
+                                src="{{ img.image.url }}"
+                                class="img-fluid rounded-3 img-size" alt="#">
+                            </div>
+                            <div class="col-md col-lg col-xl">
+                              <h5 class="title">
+                                <a class="text-black mb-0" href="{% url 'product-detail' item.product.id %}">{{ item.product.title }}</a>
+                              </h5>
+                            </div>
+                            <div class="col-md-2 col-lg-2 col-xl-2 offset-lg-1" style="margin-right: 20px">
+                                <h6 class="mb-0" id="product">{{ item.product.price }}</h6>
+                            </div>
+                          <div class="col-md-1 col-lg-1 col-xl-1 text-end">
+                              <form method="POST" action="{% url 'product-wishlist-delete' item.id %}">
+                                  {% csrf_token %}
+                                 <button class="lni lni-trash-can" type="submit"
+                                         style="font-size: 25px;
+                                         background-color: Transparent;
+                                         outline: none;
+                                         border: none">
+                                 </button>
+                              </form>
+                          </div>
+                          </div>
+                          <hr>
+                      {% endif %}
+                  {% endfor %}
+                <form method="post" action="{% url 'add-to-cart' %}" style="text-align: center">
+                    {% csrf_token %}
+                    <input type="hidden" name="product_id" value="{{ item.product.id }}">
+                    <button class="btn" style="width: 200px; color: #0c63e4"><i class="lni lni-cart"></i>Add To Cart</button>
+                </form>
+            </div>
+        {% endfor %}
+    </main>
+{% endblock %}

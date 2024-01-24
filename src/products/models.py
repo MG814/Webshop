@@ -71,3 +71,18 @@ class Review(models.Model):
         Product, on_delete=models.CASCADE, related_name="reviews"
     )
     review = models.FloatField(default=0.0)
+
+
+class Wishlist(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+
+
+class WishlistItem(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name="wishlistitems")
+    wishlist = models.ForeignKey(
+        Wishlist,
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        related_name="items_in_wishlist",
+    )
