@@ -68,13 +68,13 @@
                                 <select onchange="location = this.value;" class="form-select bg-transparent" style="color: white" aria-label="Default select example">
                                     <option style="color: black" selected value="1"><a>Hello {{ user.username }}</a></option>
                                     <option style="color: black" value="{% url 'profile' %}"><a>Account</a></option>
-                                    <option style="color: black" value="{% url 'product-add' %}"><a>Add product</a></option>
-                                    <option style="color: black" value="{% url 'product-user' %}"><a>My products</a></option>
-                                    <option style="color: black" value="{% url 'orders' %}"><a>My orders</a></option>
-                                    {% if user.role == 'Seller' %}
-                                        <option style="color: black" value="{% url 'clients-orders' %}"><a>Clients orders</a></option>
-                                    {% endif %}
-                                    <option style="color: black" value="{% url 'logout' %}"><a>Sign Out</a></option>
+                                  <option style="color: black" value="{% url 'product-add' %}"><a>Add product</a></option>
+                                  <option style="color: black" value="{% url 'product-user' %}"><a>My products</a></option>
+                                  <option style="color: black" value="{% url 'orders' %}"><a>My orders</a></option>
+                                  {% if user.role == 'Seller' %}
+                                    <option style="color: black" value="{% url 'clients-orders' %}"><a>Clients orders</a></option>
+                                  {% endif %}
+                                  <option style="color: black" value="{% url 'logout' %}"><a>Sign Out</a></option>
                                 </select>
                            {% else %}
                                 <ul class="user-login">
@@ -107,8 +107,7 @@
                         <!-- Start Main Menu Search -->
                         <div class="main-menu-search">
                             <!-- navbar search start -->
-                            <div class="navbar-search search-style-5">
-                                <form action="/search" class="search-container">
+                                <form action="/search" class="search-container navbar-search search-style-5">
                                     <div class="search-select">
                                         <div class="select-position">
                                             <select id="select1" name="category">
@@ -129,7 +128,6 @@
                                         <button class="search-btn" type="submit"> <i class="lni lni-search-alt"></i></button>
                                     </div>
                                 </form>
-                            </div>
                             <!-- navbar search Ends -->
                         </div>
                         <!-- End Main Menu Search -->
@@ -142,11 +140,12 @@
                                     <span>(+100) 123 456 7890</span>
                                 </h3>
                             </div>
+                            {% if user.is_authenticated %}
                             <div class="navbar-cart">
                                 <div class="wishlist">
-                                    <a href="javascript:void(0)">
+                                    <a href="">
                                         <i class="lni lni-heart"></i>
-                                        <span class="total-items">0</span>
+                                        <span class="total-items"></span>
                                     </a>
                                 </div>
                                 <div class="cart-items">
@@ -191,6 +190,7 @@
                                     <!--/ End Shopping Item -->
                                 </div>
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
@@ -429,18 +429,6 @@
             }
         });
     </script>
-
-<script type='text/javascript'>
-
- $(document).ready(function() {
-   $('input[name=delivery1]').change(function(){
-        $('form').submit();
-   });
-  });
-
-</script>
-
-
 </body>
 
 </html>

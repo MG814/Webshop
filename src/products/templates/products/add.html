@@ -1,7 +1,8 @@
 {% extends 'shop/base.html' %}
 {% block content %}
-    <main role="main" class="container">
-        <form method="POST" enctype="multipart/form-data" class="bg-light-grey my-padding my-margin">
+    <main role="main" class="container py-5 h-100">
+        <form method="POST" enctype="multipart/form-data" class="bg-light-grey my-padding my-margin"
+              style="border-radius: 15px">
             {% csrf_token %}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4 my-color-text">Add Product</legend>
