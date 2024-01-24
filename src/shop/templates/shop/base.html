@@ -143,9 +143,9 @@
                             {% if user.is_authenticated %}
                             <div class="navbar-cart">
                                 <div class="wishlist">
-                                    <a href="">
+                                    <a href="{%  url 'wishlist' %}">
                                         <i class="lni lni-heart"></i>
-                                        <span class="total-items"></span>
+                                        <span class="total-items">{{ wishlist.items_in_wishlist.count }}</span>
                                     </a>
                                 </div>
                                 <div class="cart-items">

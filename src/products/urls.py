@@ -7,7 +7,8 @@ from .views import (
     UserProductsPageView,
     EditProductView,
     DeleteImageView,
-    review_product,
+    DeleteWishlistProductView,
+    ReviewProduct,
 )
 
 urlpatterns = [
@@ -17,5 +18,10 @@ urlpatterns = [
     path('product/edit/<int:pk>/', EditProductView.as_view(), name='product-edit'),
     path('product/<int:pk>/delete-image/<int:img_id>/', DeleteImageView.as_view(), name='product-image-delete'),
     path('product/delete/<int:pk>/', DeleteProductView.as_view(), name='product-delete'),
-    path('product/review/<int:pk>/', review_product, name='product-review'),
+    path('product/review/<int:pk>/', ReviewProduct.as_view(), name='product-review'),
+    path(
+        "wishlist/product/delete/<int:pk>/",
+        DeleteWishlistProductView.as_view(),
+        name="product-wishlist-delete",
+    ),
 ]
