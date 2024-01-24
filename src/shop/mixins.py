@@ -1,8 +1,14 @@
 from typing import Dict, Any
-
+from .models import Order
 from products.models import Product
-from orders.models import Order
-from .context_functions import get_main_images, summary_price, get_orders, get_user_cart, get_user_address
+from .context_functions import (
+    get_main_images,
+    summary_price,
+    get_orders,
+    get_user_cart,
+    get_user_address,
+    get_wishlist,
+)
 
 
 class ExtraContextMixin:
@@ -24,5 +30,6 @@ class ExtraContextMixin:
 
         context["user_orders"] = get_orders(user).order_by("-created_at")
         context["user_cart"] = get_user_cart(user)
+        context['wishlist'] = get_wishlist(user)
 
         return context
