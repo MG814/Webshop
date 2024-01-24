@@ -56,8 +56,15 @@
                                                             <h6 class="mb-0">{{ item.product.price }}</h6>
                                                         </div>
                                                         <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                                                            <a href="{% url 'product-cart-delete' item.product.id %}"
-                                                               class="text-muted"><i class="fas fa-times"></i></a>
+                                                            <form method="POST" action="{% url 'product-cart-delete' item.id %}">
+                                                                  {% csrf_token %}
+                                                                 <button class="lni lni-trash-can" type="submit"
+                                                                         style="font-size: 25px;
+                                                                         background-color: Transparent;
+                                                                         outline: none;
+                                                                         border: none">
+                                                                 </button>
+                                                          </form>
                                                         </div>
                                                     </div>
                                                 {% endif %}

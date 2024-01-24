@@ -2,27 +2,6 @@
 {% load static %}
 
 {% block content %}
-    <!-- Start Breadcrumbs -->
-    <div class="breadcrumbs">
-        <div class="container">
-            <div class="row align-items-center">
-                <div class="col-lg-6 col-md-6 col-12">
-                    <div class="breadcrumbs-content">
-
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-6 col-12">
-                    <ul class="breadcrumb-nav">
-                        <li><a href="index.html"><i class="lni lni-home"></i> Home</a></li>
-                        <li><a href="index.html">Shop</a></li>
-                        <li>{{ object.title }}</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- End Breadcrumbs -->
-
     <!-- Start Item Details -->
     <section class="item-details section">
         <div class="container">
@@ -50,60 +29,61 @@
                     </div>
                     <div class="col-lg-6 col-md-12 col-12">
                         <div class="product-info">
-                            <h2 class="title">From {{ object.user.username }}</h2>
+                            <div style="margin-bottom: 10px">From {{ object.user.username }}</div>
                             <h2 class="title">{{ object.title }}</h2>
                             <ul class="review">
-                                {% for _ in stars %}
+                                {% for _ in product.stars %}
                                     <i class="lni lni-star-filled"></i>
                                 {% endfor %}
 
-                                {% for _ in empty_stars %}
+                                {% for _ in product.empty_stars %}
                                     <i class="lni lni-star"></i>
                                 {% endfor %}
                             </ul>
-                            <p class="category"><i class="lni lni-tag"></i> Drones:<a href="javascript:void(0)">Action
-                                    cameras</a></p>
+                            <p class="category"><i class="lni lni-tag"></i>{{ product.category }}</p>
                             <h3 class="price">{{ object.price }}</h3>
-
-                            <div >
+                            {% if user.is_authenticated %}
                                 <form method="post" action="{% url 'product-review' product.id %}">
                                     {% csrf_token %}
-
-                                    <div style="width: 150px">
-                                        <label for="color">Review</label>
-                                        <select class="form-control" name="star_rating">
-                                            <option value="1">1 star</option>
-                                            <option value="2">2 stars</option>
-                                            <option value="3">3 stars</option>
-                                            <option value="4">4 stars</option>
-                                            <option value="5">5 stars</option>
-                                        </select>
-                                    </div>
-                                    <div class="button">
-                                        <button style="width: 150px; margin-top: 10px;" class="btn"><i class="lni lni-star"></i> Review</button>
+                                    <div class="row mb-4 d-flex justify-content-between align-items-center">
+                                        <div class="col-xl-1" style="width: 225px; margin-right: 25px">
+                                            <label for="color">Review</label>
+                                            <select class="form-control" name="star_rating">
+                                                <option value="1">1 star</option>
+                                                <option value="2">2 stars</option>
+                                                <option value="3">3 stars</option>
+                                                <option value="4">4 stars</option>
+                                                <option value="5">5 stars</option>
+                                            </select>
+                                        </div>
+                                        <div class="button col-xl" style="margin-top: 25px">
+                                            <button style="width: 200px;" class="btn"><i class="lni lni-star"></i> Review</button>
+                                        </div>
                                     </div>
                                 </form>
-
-                            </div>
                             <div class="bottom-content">
                                 <div class="row align-items-end">
-                                    <div class="col-lg-4 col-md-4 col-12">
+                                    <div class="col-lg-4 col-md-4 col-12" style="margin-right: 50px;">
                                         <div class="button cart-button">
                                             <form method="post" action="{% url 'add-to-cart' %}">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="product_id" value="{{ product.id }}">
-                                                <button class="button" type="submit">
-                                                <button class="btn" style="width: 100%;">Add To Cart</button>
+                                                <button class="btn" style="width: 200px;"><i class="lni lni-cart"></i>Add To Cart</button>
                                             </form>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-12">
                                         <div class="wish-button">
-                                            <button class="btn"><i class="lni lni-heart"></i> To Wishlist</button>
+                                            <form method="post" action="{% url 'add-to-wishlist' %}">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="product_id" value="{{ product.id }}">
+                                                <button class="btn" style="width: 200px;"><i class="lni lni-heart"></i> To Wishlist</button>
+                                            </form>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
