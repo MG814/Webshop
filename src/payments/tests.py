@@ -4,8 +4,8 @@ from django.test import TestCase
 from django.test import tag
 from django.core import mail
 
-from shop.models import Cart, Item
-from users.models import User
+from orders.factory_models import UserFactory, CartFactory, OrderFactory, ItemFactory
+
 from orders.models import Order, Delivery
 from payments.functions import (
     create_new_order,
@@ -14,29 +14,19 @@ from payments.functions import (
     send_email,
     get_shipping_options
 )
-from products.models import Product
 
 
 @tag("payments_functions")
 class TestPaymentsFunctions(TestCase):
     def setUp(self) -> None:
-        self.user = User.objects.create_user(
-            username="testuser", password="testpassword"
-        )
-        self.user_data = User.objects.create(username='testuser2',
-                                             email='testuser2@wp.pl',
-                                             password="testpassword123",
-                                             role='Seller'
-                                             )
-        self.order = Order.objects.create(user_id=self.user.id,
-                                          seller_id=self.user_data.id,
-                                          price_with_shipping=100
-                                          )
-        self.cart = Cart.objects.filter(user_id=self.user.id)[0]
+        self.user = UserFactory()
+        self.seller = UserFactory()
+        self.order = OrderFactory()
+        self.cart = CartFactory()
 
     def test_create_new_order(self):
         self.assertEqual(Order.objects.count(), 1)
-        create_new_order(user_id=self.user.id, seller_id=self.user_data.id, cart=self.cart, price_amount=1000)
+        create_new_order(user_id=self.user.id, seller_id=self.seller.id, cart=self.cart, price_amount=1000)
         self.assertEqual(Order.objects.count(), 2)
 
     def test_create_new_delivery(self):
@@ -45,13 +35,7 @@ class TestPaymentsFunctions(TestCase):
         self.assertEqual(Delivery.objects.count(), 1)
 
     def test_transfer_items_from_cart_to_order(self):
-        product = Product.objects.create(user_id=self.user_data.id,
-                                         title="test",
-                                         description="testtest test",
-                                         price=Decimal("10"),
-                                         category='Other'
-                                         )
-        Item.objects.create(quantity=1, product=product, cart=self.cart,)
+        ItemFactory(cart_id=self.cart.id)
 
         self.assertEqual(self.cart.items_in_cart.count(), 1)
         self.assertEqual(self.order.items_in_order.count(), 0)

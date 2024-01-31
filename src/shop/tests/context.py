@@ -8,6 +8,7 @@ import PIL.Image
 from django.core.files.base import File
 from io import BytesIO
 
+from orders.factory_models import UserFactory, ProductFactory, CartFactory, OrderFactory, ItemFactory
 from orders.models import Order
 from shop.models import Item
 from shop.context_functions import get_user_cart, get_main_images, summary_price, get_orders, get_user_address
@@ -26,33 +27,22 @@ class TestContextFunctions(TestCase):
         return File(file_obj, name=name)
 
     def setUp(self) -> None:
-        self.user = User.objects.create_user(
-            username="testuser2", password="testpassword2"
-        )
-        self.user2 = User.objects.create_user(
-            username="testuser", password="testpassword"
-        )
-
-        self.product = Product.objects.create(
-            user_id=self.user2.id,
-            title="test2",
-            description="test2test2 2test2",
-            price=Decimal("10"),
-        )
+        self.user = UserFactory()
+        self.user2 = UserFactory()
+        self.product = ProductFactory()
+        self.cart = CartFactory(user_id=self.user.id)
 
     def test_get_user_cart(self):
         self.assertEqual(get_user_cart(self.user).id, 1)
 
     def test_get_orders(self):
-        Order.objects.create(user_id=self.user.id, seller_id=self.user2.id, price_with_shipping=100)
+        OrderFactory(user_id=self.user.id)
         self.assertEqual(get_orders(self.user).count(), 1)
 
     def test_summary_price(self):
-        self.item_in_cart = Item.objects.create(
-            quantity=2, product_id=self.product.id, cart_id=get_user_cart(self.user).id
-        )
+        self.item_in_cart = ItemFactory(product_id=self.product.id, cart_id=self.cart.id)
 
-        self.assertEqual(summary_price(self.user.id), Money("20.0", "USD"))
+        self.assertEqual(summary_price(self.user.id), Money("563", "USD"))
 
     def test_get_main_images(self):
         p_id = Product.objects.values()[0].get("id")
