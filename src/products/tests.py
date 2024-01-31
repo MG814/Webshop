@@ -8,6 +8,7 @@ from django.test import tag
 from django.urls import reverse
 from decimal import Decimal
 
+from orders.factory_models import UserFactory, ProductFactory
 from products.models import Product, Image
 
 from users.models import User
@@ -25,32 +26,24 @@ class TestProductsOperations(TestCase):
         return File(file_obj, name=name)
 
     def setUp(self) -> None:
-        self.user = User.objects.create_user(
-            username="testuser", password="testpassword"
-        )
-        self.product = Product.objects.create(
-            user_id=self.user.id,
-            title="test",
-            description="testtest test",
-            price=Decimal("10"),
-            category='Other'
-        )
+        self.user = UserFactory()
+        self.product = ProductFactory()
 
         self.money = Money(Decimal("10"), "USD")
-        self.product = {
+
+    def test_add_new_product(self):
+        self.product_dict = {
             "title": "product1",
             "description": "test test",
             "price_0": self.money.amount,
             "price_1": self.money.currency,
             'category': 'Other',
         }
-
-    def test_add_new_product(self):
         self.client.force_login(self.user)
 
         self.assertEqual(Product.objects.count(), 1)
 
-        response = self.client.post(reverse("product-add"), data=self.product)
+        response = self.client.post(reverse("product-add"), data=self.product_dict)
         self.assertEqual(response.status_code, 302)
 
         self.assertEqual(Product.objects.count(), 2)
