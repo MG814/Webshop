@@ -92,10 +92,10 @@ class ProductCreateView(ExtraContextMixin, LoginRequiredMixin, CreateView):
         super().form_valid(form)
 
 
-class DeleteProductView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+class DeleteProductView(ExtraContextMixin, LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Product
     template_name = "products/delete_confirm.html"
-    success_url = "/"
+    success_url = reverse_lazy("product-user")
 
     def test_func(self):
         product = self.get_object()
