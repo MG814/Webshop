@@ -15,6 +15,20 @@ jobs:
       matrix:
         python-version: ['3.10']
 
+    services:
+      postgres:
+        image: postgres
+        env:
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          POSTGRES_USER: ${{ vars.DB_USER }}
+          POSTGRES_DB: ${{ vars.DB_NAME }}
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
     steps:
     - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
@@ -29,3 +43,13 @@ jobs:
       run: |
         cd src
         python manage.py test
+      env:
+        DB_NAME: ${{ vars.DB_NAME }}
+        DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+        DB_USER: ${{ vars.DB_USER }}
+        DB_PORT: ${{ vars.DB_PORT }}
+        DB_HOST: ${{ vars.DB_HOST }}
+        STRIPE_PUBLIC_KEY: ${{ vars.STRIPE_PUBLIC_KEY }}
+        STRIPE_SECRET_KEY: ${{ secrets.STRIPE_PUBLIC_KEY }}
+        ENDPOINT_SECRET: ${{ secrets.ENDPOINT_SECRET }}
+        USE_S3: false
