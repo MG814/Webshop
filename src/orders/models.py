@@ -19,8 +19,8 @@ class Order(models.Model):
         blank=True,
     )
     created_at = models.DateTimeField(auto_created=True, auto_now_add=True)
-    tracking_number = models.CharField(blank=True, validators=[MinLengthValidator(20)])
-    reception_code = models.CharField(blank=True)
+    tracking_number = models.CharField(max_length=50, blank=True, validators=[MinLengthValidator(20)])
+    reception_code = models.CharField(max_length=25, blank=True)
 
 
 class Delivery(models.Model):
@@ -36,4 +36,4 @@ class Delivery(models.Model):
     order = models.ForeignKey(
         Order, on_delete=models.CASCADE, null=True, blank=True, related_name="delivery"
     )
-    status = models.CharField(default='Ordered')
+    status = models.CharField(max_length=25, default='Ordered')

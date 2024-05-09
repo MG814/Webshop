@@ -115,6 +115,7 @@ __pypackages__/
 # Celery stuff
 celerybeat-schedule
 celerybeat.pid
+celerybeat-schedule.dir
 
 # SageMath parsed files
 *.sage.py
@@ -164,3 +165,7 @@ src/media/product_pics/
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+
+# Other
+stripe.exe
+
