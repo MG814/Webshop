@@ -49,7 +49,7 @@ jobs:
         DB_USER: ${{ vars.DB_USER }}
         DB_PORT: ${{ vars.DB_PORT }}
         DB_HOST: ${{ vars.DB_HOST }}
-        STRIPE_PUBLIC_KEY: ${{ vars.STRIPE_PUBLIC_KEY }}
-        STRIPE_SECRET_KEY: ${{ secrets.STRIPE_PUBLIC_KEY }}
+        STRIPE_PUBLIC_KEY: ${{ secrets.STRIPE_PUBLIC_KEY }}
+        STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
         ENDPOINT_SECRET: ${{ secrets.ENDPOINT_SECRET }}
         USE_S3: false
