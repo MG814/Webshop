@@ -52,4 +52,3 @@ jobs:
         STRIPE_PUBLIC_KEY: ${{ secrets.STRIPE_PUBLIC_KEY }}
         STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
         ENDPOINT_SECRET: ${{ secrets.ENDPOINT_SECRET }}
-        USE_S3: false
