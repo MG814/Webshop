@@ -42,7 +42,7 @@ jobs:
     - name: Run Tests
       run: |
         cd src
-        python manage.py test
+        python manage.py test --exclude-tag elastic
       env:
         DB_NAME: ${{ vars.DB_NAME }}
         DB_PASSWORD: ${{ secrets.DB_PASSWORD }}

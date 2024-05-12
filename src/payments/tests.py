@@ -1,5 +1,3 @@
-from _decimal import Decimal
-
 from django.test import TestCase
 from django.test import tag
 from django.core import mail
@@ -34,6 +32,7 @@ class TestPaymentsFunctions(TestCase):
         create_new_delivery(name='Free', price=15, order_id=self.order.id)
         self.assertEqual(Delivery.objects.count(), 1)
 
+    @tag("elastic")
     def test_transfer_items_from_cart_to_order(self):
         ItemFactory(cart_id=self.cart.id)
 

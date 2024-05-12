@@ -11,10 +11,10 @@ from decimal import Decimal
 from orders.factory_models import UserFactory, ProductFactory
 from products.models import Product, Image
 
-from users.models import User
 from djmoney.money import Money
 
 
+@tag("elastic")
 @tag("product")
 class TestProductsOperations(TestCase):
     @staticmethod
