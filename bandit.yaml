@@ -1,3 +1,2 @@
 exclude_dirs: ['tests']
-tests: ['B105', 'B106']
 skips: ['B105', 'B106']
