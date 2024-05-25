@@ -53,7 +53,7 @@ jobs:
         ENDPOINT_SECRET: ${{ secrets.ENDPOINT_SECRET }}
     - name: Run Bandit
       run: | 
-        bandit -c bandit.yaml -r src
+        bandit -c pyproject.toml -r src
     - name: Run Safety
       run: |
         safety check
