@@ -1,6 +1,7 @@
 from django.shortcuts import get_object_or_404, redirect
 from django.views import View
 from django.views.generic import TemplateView, DetailView
+from django.contrib import messages
 
 from .models import Order
 from shop.mixins import ExtraContextMixin

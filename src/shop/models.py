@@ -1,6 +1,6 @@
 from django.db import models
 from djmoney.models.fields import MoneyField
-from orders.models import Order, Delivery
+from orders.models import Order
 from products.models import Product
 
 from core import settings

@@ -6,10 +6,13 @@ from django.shortcuts import redirect
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
+from decimal import Decimal
 
 from shop.mixins import ExtraContextMixin
 from shop.context_functions import get_user_cart
-from payments.functions import *
+from payments.functions import get_shipping_options, create_new_order, create_new_delivery, \
+    transfer_items_from_cart_to_order, send_email
+
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -87,10 +90,10 @@ def notify_stripe_view(request):  # notify_stripe
         event = stripe.Webhook.construct_event(
             payload, sig_header, settings.ENDPOINT_SECRET
         )
-    except ValueError as e:
+    except ValueError:
         # Invalid payload
         return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError as e:
+    except stripe.error.SignatureVerificationError:
         # Invalid signature
         return HttpResponse(status=400)
 

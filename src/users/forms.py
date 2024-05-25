@@ -1,4 +1,4 @@
-from django.contrib.auth.forms import UserCreationForm, User, AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django import forms
 
 from products.models import Wishlist
