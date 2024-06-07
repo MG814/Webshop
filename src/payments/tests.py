@@ -3,15 +3,11 @@ from django.test import tag
 from django.core import mail
 
 from orders.factory_models import UserFactory, CartFactory, OrderFactory, ItemFactory
-
 from orders.models import Order, Delivery
-from payments.functions import (
-    create_new_order,
-    create_new_delivery,
-    transfer_items_from_cart_to_order,
-    send_email,
-    get_shipping_options
-)
+
+from payments.email_utils import send_email
+from payments.orders import create_new_order, create_new_delivery, transfer_items_from_cart_to_order
+from payments.shipping import get_shipping_options
 
 
 @tag("payments_functions")
