@@ -11,12 +11,14 @@
 
 
 ## General information
-- The goal of the project is to improve Django programming skills.
-- Webshop is a site when users can:
+The goal of the project is to improve Django programming skills.
+
+Webshop is a site when users can:
 - sell products
 - buy products
 - ratings products
-- This project was part of the Python Dev-Mentoring programming course.
+  
+This project was part of the Python Dev-Mentoring programming course.
 
 ## Used technologies
 - awsebcli – version 3.20.10
