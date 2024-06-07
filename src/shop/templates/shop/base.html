@@ -70,9 +70,9 @@
                                     <option style="color: black" value="{% url 'profile' %}"><a>Account</a></option>
                                   <option style="color: black" value="{% url 'product-add' %}"><a>Add product</a></option>
                                   <option style="color: black" value="{% url 'product-user' %}"><a>My products</a></option>
-                                  <option style="color: black" value="{% url 'orders' %}"><a>My orders</a></option>
+                                  <option style="color: black" value="{% url 'order' %}"><a>My orders</a></option>
                                   {% if user.role == 'Seller' %}
-                                    <option style="color: black" value="{% url 'clients-orders' %}"><a>Clients orders</a></option>
+                                    <option style="color: black" value="{% url 'order-client' %}"><a>Clients orders</a></option>
                                   {% endif %}
                                   <option style="color: black" value="{% url 'logout' %}"><a>Sign Out</a></option>
                                 </select>
@@ -149,7 +149,7 @@
                                     </a>
                                 </div>
                                 <div class="cart-items">
-                                    <a href="{% url 'user-cart' %}" class="main-btn">
+                                    <a href="{% url 'cart' %}" class="main-btn">
                                         <i class="lni lni-cart"></i>
                                         <span class="total-items">{{ user_cart.items_in_cart.count }}</span>
                                     </a>
@@ -182,7 +182,7 @@
                                                 <span class="total-amount">{{ sum_price }}</span>
                                             </div>
                                             <div class="button">
-                                                <a href="{% url 'user-cart' %}" class="btn animate">Checkout</a>
+                                                <a href="{% url 'cart' %}" class="btn animate">Checkout</a>
                                             </div>
                                         </div>
                                     </div>

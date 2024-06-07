@@ -26,7 +26,7 @@
                                 <h6 class="mb-0" id="product">{{ item.product.price }}</h6>
                             </div>
                           <div class="col-md-1 col-lg-1 col-xl-1 text-end">
-                              <form method="POST" action="{% url 'product-wishlist-delete' item.id %}">
+                              <form method="POST" action="{% url 'wishlist-product-delete' item.id %}">
                                   {% csrf_token %}
                                  <button class="lni lni-trash-can" type="submit"
                                          style="font-size: 25px;
@@ -40,9 +40,8 @@
                           <hr>
                       {% endif %}
                   {% endfor %}
-                <form method="post" action="{% url 'add-to-cart' %}" style="text-align: center">
+                <form method="post" action="{% url 'cart-product-add' item.product_id %}" style="text-align: center">
                     {% csrf_token %}
-                    <input type="hidden" name="product_id" value="{{ item.product.id }}">
                     <button class="btn" style="width: 200px; color: #0c63e4"><i class="lni lni-cart"></i>Add To Cart</button>
                 </form>
             </div>

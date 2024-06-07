@@ -1,6 +1,53 @@
 {% extends 'shop/base.html' %}
 {% load static %}
 {% block content %}
+    <!-- Start Hero Area -->
+    <section class="hero-area">
+        <div class="container">
+            <div class="slider-head">
+                <!-- Start Hero Slider -->
+                <div class="hero-slider">
+                    <!-- Start Single Slider -->
+                    {% for product in rand_items %}
+                        {% for img in main_images %}
+                            {% if img.product.id == product.id %}
+                                <div class="my-single-slider">
+                                    <div class="single-slider">
+                                        <div class="content">
+                                            <div class="row">
+                                                <div class="col-sm-8">
+                                                    <h2>{{ product.title }}</h2>
+                                                    <p>
+                                                        <p class="break-word">{{ product.description }}</p>
+                                                    </p>
+                                                    <h3>
+                                                        <span>Now Only</span>{{ product.price }}
+                                                    </h3>
+                                                    <div class="button">
+                                                        <a href="{% url 'product-detail' product.id %}" class="btn">Shop Now</a>
+                                                    </div>
+                                                </div>
+                                                <div class="col-sm-4">
+                                                    <img class="img-main-main rounded-3"
+                                                         src="{{ img.image.url }}"
+                                                         alt="#"
+                                                         width="200"
+                                                         height="200">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    {% endfor %}
+                    <!-- End Single Slider -->
+                </div>
+                <!-- End Hero Slider -->
+            </div>
+        </div>
+    </section>
+    <!-- End Hero Area -->
     <!-- Start Trending Product Area -->
     <section class="trending-product section" style="margin-top: 12px;">
         <div class="container">
@@ -8,15 +55,22 @@
                 <div class="col-12">
                     <div class="section-title">
                         <h2>Products</h2>
-                        <p>
-                            There are many variations of passages of Lorem Ipsum available, but the majority have
-                            suffered alteration in some form.
-                        </p>
+                    </div>
+                    <div class="select-position">
+                        <select class="filters"
+                                style="width: 150px; height: 30px; background-color: white; border-radius: 5px"
+                                id="select1" name="sort" onchange="location = this.value;">
+                            <option selected>Filters</option>
+                            <option class="filter_by" value="?sort=l2hp">Lowest price</option>
+                            <option class="filter_by" value="?sort=h2lp">Highest price</option>
+                            <option class="filter_by" value="?sort=l2hr">Lowest review</option>
+                            <option class="filter_by" value="?sort=h2lr">Highest review</option>
+                        </select>
                     </div>
                 </div>
             </div>
             <div class="row">
-                {% for product in my_search %}
+                {% for product in products %}
                     <div class="col-lg-3 col-md-6 col-12">
                         <!-- Start Single Product -->
                         <div class="single-product">
@@ -28,11 +82,10 @@
                                              alt="#"
                                              width="300"
                                              height="300">
-                                        <form method="post" action="{% url 'add-to-cart' %}">
+                                        <form method="post" action="{% url 'cart-product-add'  product.id %}">
                                             {% csrf_token %}
-                                            <input type="hidden" name="product_id" value="{{ product.id }}">
-                                            <button class="button rounded-3" type="submit">
-                                                <a class="btn my-btn" style="color: white;"><i class="lni lni-cart"></i> Add to Cart</a>
+                                            <button class="button btn rounded-3" type="submit">
+                                                <a class="btn" style="color: white;"><i class="lni lni-cart"></i> Add to Cart</a>
                                             </button>
                                         </form>
                                     </div>
@@ -44,8 +97,8 @@
                                     <a href="{% url 'product-detail' product.id %}">{{ product.title }}</a>
                                 </h4>
                                 <ul class="review">
-                                    {% for i in stars %}<i class="lni lni-star-filled"></i>{% endfor %}
-                                    {% for _ in empty_stars %}<i class="lni lni-star"></i>{% endfor %}
+                                    {% for _ in product.stars %}<i class="lni lni-star-filled"></i>{% endfor %}
+                                    {% for _ in product.empty_stars %}<i class="lni lni-star"></i>{% endfor %}
                                 </ul>
                                 <div class="price">
                                     <span>{{ product.price }}</span>
@@ -107,45 +160,4 @@
         </div>
     </section>
     <!-- End Shipping Info -->
-    <!-- ========================= JS here ========================= -->
-    <script type="text/javascript">
-        //========= Hero Slider
-        tns({
-            container: '.hero-slider',
-            slideBy: 'page',
-            autoplay: true,
-            autoplayButtonOutput: false,
-            mouseDrag: true,
-            gutter: 0,
-            items: 1,
-            nav: false,
-            controls: true,
-            controlsText: ['<i class="lni lni-chevron-left"></i>', '<i class="lni lni-chevron-right"></i>'],
-        });
-
-        //======== Brand Slider
-        tns({
-            container: '.brands-logo-carousel',
-            autoplay: true,
-            autoplayButtonOutput: false,
-            mouseDrag: true,
-            gutter: 15,
-            nav: false,
-            controls: false,
-            responsive: {
-                0: {
-                    items: 1,
-                },
-                540: {
-                    items: 3,
-                },
-                768: {
-                    items: 5,
-                },
-                992: {
-                    items: 6,
-                }
-            }
-        });
-    </script>
 {% endblock %}

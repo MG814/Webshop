@@ -82,9 +82,8 @@
                                              alt="#"
                                              width="300"
                                              height="300">
-                                        <form method="post" action="{% url 'add-to-cart' %}">
+                                        <form method="post" action="{% url 'cart-product-add'  product.id %}">
                                             {% csrf_token %}
-                                            <input type="hidden" name="product_id" value="{{ product.id }}">
                                             <button class="button btn rounded-3" type="submit">
                                                 <a class="btn" style="color: white;"><i class="lni lni-cart"></i> Add to Cart</a>
                                             </button>

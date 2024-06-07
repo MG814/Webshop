@@ -8,7 +8,7 @@ from shop.mixins import ExtraContextMixin
 
 
 class ElasticsearchView(ExtraContextMixin, TemplateView):
-    template_name = "shop/elasticsearch.html"
+    template_name = "searching/elasticsearch.html"
 
     def perform_search(self, title, category) -> Product:
         base_query = Q('bool', must=[], must_not=[])

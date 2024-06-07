@@ -6,8 +6,8 @@ from .views.cart import CartUserView, DeleteCartProductView, AddToCart, ChangeQu
 urlpatterns = [
     path('', HomePageView.as_view(), name='home'),
 
-    path('cart/', CartUserView.as_view(), name='user-cart'),
-    path('cart/product/delete/<int:pk>/', DeleteCartProductView.as_view(), name='product-cart-delete'),
-    path('cart/product/add/', AddToCart.as_view(), name='add-to-cart'),
-    path('cart/product/quantity/', ChangeQuantity.as_view(), name='change-quantity'),
+    path('cart/', CartUserView.as_view(), name='cart'),
+    path('cart/products/<int:pk>/delete/', DeleteCartProductView.as_view(), name='cart-product-delete'),
+    path('cart/products/<int:pk>/add/', AddToCart.as_view(), name='cart-product-add'),
+    path('cart/products/quantity/', ChangeQuantity.as_view(), name='cart-product-quantity-change'),
 ]

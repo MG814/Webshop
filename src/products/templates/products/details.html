@@ -64,18 +64,16 @@
                                 <div class="row align-items-end">
                                     <div class="col-lg-4 col-md-4 col-12" style="margin-right: 50px;">
                                         <div class="button cart-button">
-                                            <form method="post" action="{% url 'add-to-cart' %}">
+                                            <form method="post" action="{% url 'cart-product-add' product.id %}">
                                                 {% csrf_token %}
-                                                <input type="hidden" name="product_id" value="{{ product.id }}">
                                                 <button class="btn" style="width: 200px;"><i class="lni lni-cart"></i>Add To Cart</button>
                                             </form>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-12">
                                         <div class="wish-button">
-                                            <form method="post" action="{% url 'add-to-wishlist' %}">
+                                            <form method="post" action="{% url 'wishlist-product-add' product.id %}">
                                                 {% csrf_token %}
-                                                <input type="hidden" name="product_id" value="{{ product.id }}">
                                                 <button class="btn" style="width: 200px;"><i class="lni lni-heart"></i> To Wishlist</button>
                                             </form>
                                         </div>

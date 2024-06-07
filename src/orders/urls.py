@@ -10,10 +10,10 @@ from .views import (
 )
 
 urlpatterns = [
-    path('orders/', OrdersView.as_view(), name='orders'),
-    path('orders/order/<int:pk>/', OrderDetailsView.as_view(), name='order-details'),
-    path("orders/clients", ClientsOrdersView.as_view(), name="clients-orders"),
-    path("orders/order/<int:pk>/client", ClientsOrderDetailsView.as_view(), name="client-order-details"),
-    path("orders/send/<int:pk>/", SendOrderStatus.as_view(), name="send"),
-    path("orders/recerive/<int:pk>/", ReceiveOrderStatus.as_view(), name="receive"),
+    path('orders/', OrdersView.as_view(), name='order'),
+    path('orders/<int:pk>/', OrderDetailsView.as_view(), name='order-details'),
+    path("orders/clients", ClientsOrdersView.as_view(), name="order-client"),
+    path("orders/<int:pk>/client", ClientsOrderDetailsView.as_view(), name="order-client-details"),
+    path("orders/<int:pk>/send/", SendOrderStatus.as_view(), name="send"),
+    path("orders/<int:pk>/recerive/", ReceiveOrderStatus.as_view(), name="receive"),
 ]

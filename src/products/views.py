@@ -135,12 +135,12 @@ class DeleteWishlistProductView(DeleteView):
 
 
 class AddToWishList(View):
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         user = request.user.id
-        product_id_from = request.POST.get("product_id")
+        pr_id = kwargs.get('pk')
         wishlist_id = Wishlist.objects.filter(user_id=user).values("id")[0].get("id")
         product_id = (
-            Product.objects.filter(id=product_id_from).values("id")[0].get("id")
+            Product.objects.filter(id=pr_id).values("id")[0].get("id")
         )
 
         product_id_query_set = WishlistItem.objects.filter(wishlist_id=wishlist_id).values("product_id")
