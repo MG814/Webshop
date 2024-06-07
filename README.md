@@ -5,6 +5,9 @@
 * [General information](#general-information)
 * [Used technologies](#used-technologies)
 * [Features](#features)
+* [Screenshots](#screenshots)
+* [Project status](#project-status)
+* [Room for improvement](#room-for-improvement)
 
 
 ## General information
@@ -47,3 +50,18 @@
 
 
 ## Screenshots
+
+![login screenshot](./screenshots/login.png)
+
+![registration screenshot](./screenshots/registration.png)
+
+![main screenshot](./screenshots/main.png)
+
+![add screenshot](./screenshots/add.PNG)
+
+
+## Project status
+Project is in progress
+
+
+## Room for Improvement
