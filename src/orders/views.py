@@ -52,7 +52,7 @@ class SendOrderStatus(View):
         delivery_status.save()
         order.save()
 
-        return redirect("client-order-details", pk)
+        return redirect("order-client-details", pk)
 
 
 class ReceiveOrderStatus(View):

@@ -2,6 +2,8 @@ from django.test import TestCase
 from django.test import tag
 from django.core import mail
 
+from core.settings import DEFAULT_EMAIL, DEFAULT_CLIENT_EMAIL
+
 from orders.factory_models import UserFactory, CartFactory, OrderFactory, ItemFactory
 from orders.models import Order, Delivery
 
@@ -47,8 +49,8 @@ class TestPaymentsFunctions(TestCase):
         self.assertEqual(first_message.subject, 'GridShop: Successful Payment')
         self.assertEqual(first_message.body, 'test.com')
         self.assertEqual(len(mail.outbox), 1)
-        self.assertEqual(first_message.from_email, 'wenomus@gmail.com')
-        self.assertEqual(first_message.to, ['keponel538@ziragold.com'])
+        self.assertEqual(first_message.from_email, DEFAULT_EMAIL)
+        self.assertEqual(first_message.to, [DEFAULT_CLIENT_EMAIL])
 
     def test_get_shipping_options(self):
         options = get_shipping_options('Next_day', 0.2, 15, 3)

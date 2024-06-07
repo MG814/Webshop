@@ -201,6 +201,7 @@ EMAIL_PORT = 587
 EMAIL_HOST_USER = 'wenomus@gmail.com'
 EMAIL_HOST_PASSWORD = 'wxna ynjm xwhr cgbj '
 DEFAULT_EMAIL = 'wenomus@gmail.com'
+DEFAULT_CLIENT_EMAIL = 'sacesod808@acuxi.com'
 
 
 # CELERY SETTINGS
