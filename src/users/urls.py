@@ -9,6 +9,6 @@ urlpatterns = [
 
     path('profile/', ProfileView.as_view(), name='profile'),
 
-    path('address/add', AddressView.as_view(), name='address'),
-    path('address/edit/<int:pk>/', AddressEditView.as_view(), name='address-edit'),
+    path('address/add', AddressView.as_view(), name='address-add'),
+    path('address/<int:pk>/edit/', AddressEditView.as_view(), name='address-edit'),
 ]

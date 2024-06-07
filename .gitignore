@@ -160,3 +160,11 @@ cython_debug/
 .idea/
 
 src/media/product_pics/
+src/media/profile_pics/
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+
+# Other
+stripe.exe
