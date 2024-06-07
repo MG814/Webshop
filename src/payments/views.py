@@ -10,41 +10,17 @@ from decimal import Decimal
 
 from shop.mixins import ExtraContextMixin
 from shop.context_functions import get_user_cart
-from payments.functions import get_shipping_options, create_new_order, create_new_delivery, \
-    transfer_items_from_cart_to_order, send_email
+
+from payments.cart import _create_line_items
+from payments.email_utils import send_email
+from payments.orders import create_new_order, create_new_delivery, transfer_items_from_cart_to_order
+from payments.shipping import get_shipping_options
 
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
 class CreateCheckoutSessionView(ExtraContextMixin, View):
-    def _create_line_items(self, items_in_cart, shipping_name, shipping_price, buyer_id):
-        line_items = []
-
-        for item_in_cart in items_in_cart:
-            # img = item_in_cart.product.images.first() # TODO Uncomment after app are deployed on AWS or other provider.
-            dct = {
-                "price_data": {
-                    "currency": "usd",
-                    "unit_amount": int(
-                        float(item_in_cart.product.price.amount) * 100.00
-                    ),
-                    "product_data": {
-                        "name": item_in_cart.product.title,
-                        "metadata": {
-                            "buyer_id": buyer_id,
-                            "seller_id": item_in_cart.product.user.id,
-                            "shipping_name": shipping_name.replace("_", " "),
-                            "shipping_price": shipping_price,
-                        },
-                        # 'images': [img.image], # TODO Uncomment after app are deployed on AWS or other provider.
-                    },
-                },
-                "quantity": item_in_cart.quantity,
-            }
-            line_items.append(dct)
-        return line_items
-
     def post(self, request, *args, **kwargs):
         user = self.request.user.id
         cart = get_user_cart(user)
@@ -66,7 +42,7 @@ class CreateCheckoutSessionView(ExtraContextMixin, View):
             shipping_options=[
                 get_shipping_options(shipping, shipping_price, max_day, min_day)
             ],
-            line_items=self._create_line_items(
+            line_items=_create_line_items(
                 cart.items_in_cart.all(), shipping, shipping_price, user
             ),
             mode="payment",
@@ -81,7 +57,7 @@ class CreateCheckoutSessionView(ExtraContextMixin, View):
 
 
 @csrf_exempt
-def notify_stripe_view(request):  # notify_stripe
+def notify_stripe_view(request):
     payload = request.body
     sig_header = request.META["HTTP_STRIPE_SIGNATURE"]
     event = None
