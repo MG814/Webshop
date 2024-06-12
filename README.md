@@ -6,6 +6,7 @@
 * [Used technologies](#used-technologies)
 * [Features](#features)
 * [Screenshots](#screenshots)
+* [Setup](#setup)
 * [Project status](#project-status)
 * [Room for improvement](#room-for-improvement)
 
@@ -57,6 +58,57 @@ This project was part of the Python Dev-Mentoring programming course.
 ![main screenshot](./screenshots/main.png)
 
 ![add screenshot](./screenshots/add.PNG)
+
+
+## Setup
+The first thing to do is to clone the repository:
+
+```sh
+$ git clone https://github.com/MG814/Webshop.git
+```
+```sh
+$ cd Webshop
+```
+
+Create a virtual Python environment by typing the following command in the terminal:
+
+`python -m venv /path/to/new/virtual/environment`
+
+Then activate the created environment by typing the appropriate command:
+on Windows:
+
+`C:\> <venv>\Scripts\activate.bat`
+
+on POSIX:
+
+`$ source <venv>/bin/activate`
+ 
+Then install the dependencies:
+
+```sh
+(venv)$ pip -r install requirements.txt
+```
+
+Now create new docker container:
+
+```sh
+(venv)$ cd src
+```
+```sh
+(venv)$ docker-compouse up
+```
+
+Run stripe services:
+
+```sh
+(venv)$ .\stripe listen --forward-to localhost:8000/webhook
+```
+
+To run the program, type:
+
+```sh
+(venv)$ python manage.py runserver
+```
 
 
 ## Project status
