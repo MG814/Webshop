@@ -51,6 +51,9 @@ This project was part of the Python Dev-Mentoring programming course.
 
 ## Screenshots
 
+<details> 
+<summary></summary>
+	
 ![login screenshot](./screenshots/login.png)
 
 ![registration screenshot](./screenshots/registration.png)
@@ -58,6 +61,7 @@ This project was part of the Python Dev-Mentoring programming course.
 ![main screenshot](./screenshots/main.png)
 
 ![add screenshot](./screenshots/add.PNG)
+</details>
 
 
 ## Setup
