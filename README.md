@@ -21,15 +21,12 @@ Webshop is a site when users can:
 This project was part of the Python Dev-Mentoring programming course.
 
 ## Used technologies
-- awsebcli – version 3.20.10
-- botocore – version 1.31.85
 - celery – version 5.3.6
 - Django – version 4.0.10
 - docker – version 6.1.3
 - elasticsearch – version 8.10.1
 - elsticsearch-dsl – version 8.9.0
 - factory-boy – version 3.3.0
-- Faker – version 22.2.0
 - pre-commit – version 3.5.0
 - python - version 3.10.4
 - redis – version 5.0.3
