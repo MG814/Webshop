@@ -61,6 +61,20 @@ This project was part of the Python Dev-Mentoring programming course.
 ![main screenshot](./screenshots/main.png)
 
 ![add screenshot](./screenshots/add.PNG)
+
+![edit-products screenshot](./screenshots/edit-products.png)
+
+![my-products screenshot](./screenshots/my-products.png)
+
+![my-orders screenshot](./screenshots/my-orders.png)
+
+![order-details screenshot](./screenshots/order-details.png)
+
+![cart screenshot](./screenshots/cart.png)
+
+![wishlist screenshot](./screenshots/wishlist.png)
+
+![profile screenshot](./screenshots/profile.png)
 </details>
 
 
