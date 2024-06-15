@@ -22,6 +22,7 @@ Webshop is a site when users can:
 This project was part of the Python Dev-Mentoring programming course.
 
 ## Used technologies
+- bootstrap - version 5
 - celery – version 5.3.6
 - Django – version 4.0.10
 - docker – version 6.1.3
