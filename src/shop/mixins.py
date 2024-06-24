@@ -25,6 +25,8 @@ class ExtraContextMixin:
 
     def __get_authorized_user_additional_context(self, context) -> Dict[str, Any]:
         user = self.request.user.id
+        context["logged_user"] = user
+
         context["sum_price"] = summary_price(user)
         context["user_address"] = get_user_address(user)
 

@@ -384,6 +384,12 @@
     </a>
 
     <!-- ========================= JS here ========================= -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    {% for msg in messages %}
+        <script>
+            swal("{{msg}}");
+        </script>
+    {% endfor %}
     <script src="{% static 'js/bootstrap.min.js' %}"></script>
     <script src="{% static 'js/tiny-slider.js' %}"></script>
     <script src="{% static 'js/glightbox.min.js' %}"></script>
