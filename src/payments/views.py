@@ -15,6 +15,7 @@ from payments.cart import _create_line_items
 from payments.email_utils import send_email
 from payments.orders import create_new_order, create_new_delivery, transfer_items_from_cart_to_order
 from payments.shipping import get_shipping_options
+import logging
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -68,6 +69,7 @@ def notify_stripe_view(request):
         # Invalid payload
         return HttpResponse(status=400)
     except stripe.error.SignatureVerificationError:
+        logging.error('SignatureVerifcationError')
         # Invalid signature
         return HttpResponse(status=400)
 
@@ -99,5 +101,4 @@ def notify_stripe_view(request):
         buyer_email = stripe.Customer.list().get('data')[0].get('email')
         send_email(receipt_url=charge.get('receipt_url'), buyer_email=buyer_email)
 
-    # Passed signature verification
     return HttpResponse(status=200)

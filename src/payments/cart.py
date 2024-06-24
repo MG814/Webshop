@@ -1,8 +1,10 @@
 from decimal import Decimal
 from typing import Any
 
+from shop.models import Item
 
-def _create_line_items(items_in_cart: list['Item'], shipping_name: str, shipping_price: Decimal, buyer_id: int) -> \
+
+def _create_line_items(items_in_cart: list[Item], shipping_name: str, shipping_price: Decimal, buyer_id: int) -> \
         list[dict[str, Any]]:
     line_items = []
 
