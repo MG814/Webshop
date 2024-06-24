@@ -16,7 +16,6 @@ from payments.email_utils import send_email
 from payments.orders import create_new_order, create_new_delivery, transfer_items_from_cart_to_order
 from payments.shipping import get_shipping_options
 
-
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 
@@ -47,7 +46,7 @@ class CreateCheckoutSessionView(ExtraContextMixin, View):
             ),
             mode="payment",
             invoice_creation={"enabled": True},
-            success_url=YOUR_DOMAIN + "/orders/",  # TODO na potem reverse_lazy
+            success_url=YOUR_DOMAIN + "/orders/",
             cancel_url=YOUR_DOMAIN + "",
         )
         print("+++++++++++++++++++++++++++++++++++")
@@ -60,7 +59,6 @@ class CreateCheckoutSessionView(ExtraContextMixin, View):
 def notify_stripe_view(request):
     payload = request.body
     sig_header = request.META["HTTP_STRIPE_SIGNATURE"]
-    event = None
 
     try:
         event = stripe.Webhook.construct_event(
@@ -98,7 +96,8 @@ def notify_stripe_view(request):
         charge = stripe.Charge.retrieve(
             event["data"]["object"]["id"],
         )
-        send_email(receipt_url=charge.get('receipt_url'))
+        buyer_email = stripe.Customer.list().get('data')[0].get('email')
+        send_email(receipt_url=charge.get('receipt_url'), buyer_email=buyer_email)
 
     # Passed signature verification
     return HttpResponse(status=200)
