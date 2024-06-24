@@ -1,5 +1,4 @@
-from django.test import TestCase
-from django.test import tag
+from django.test import TestCase, tag
 from django.urls import reverse
 
 from orders.factory_models import DeliveryFactory

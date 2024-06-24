@@ -17,9 +17,7 @@
                                             <div class="row">
                                                 <div class="col-sm-8">
                                                     <h2>{{ product.title }}</h2>
-                                                    <p>
-                                                        <p class="break-word">{{ product.description }}</p>
-                                                    </p>
+                                                        <p class="break-word">{{ product.description|truncatewords:25 }}</p>
                                                     <h3>
                                                         <span>Now Only</span>{{ product.price }}
                                                     </h3>

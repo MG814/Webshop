@@ -15,5 +15,5 @@ urlpatterns = [
     path("orders/clients", ClientsOrdersView.as_view(), name="order-client"),
     path("orders/<int:pk>/client", ClientsOrderDetailsView.as_view(), name="order-client-details"),
     path("orders/<int:pk>/send/", SendOrderStatus.as_view(), name="send"),
-    path("orders/<int:pk>/recerive/", ReceiveOrderStatus.as_view(), name="receive"),
+    path("orders/<int:pk>/receive/", ReceiveOrderStatus.as_view(), name="receive"), # -> receive
 ]
