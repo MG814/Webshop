@@ -1,46 +1,47 @@
 {% extends 'shop/base.html' %}
 {% block content %}
     <main role="main" class="container py-5 h-100">
-        {% for item in order.items_in_order.all %}
-            <div class="bg-light-grey my-padding my-margin" style="border-radius: 15px; padding: 20px 20px 20px 20px">
-                <div class="row mb-4 d-flex justify-content-between align-items-center" style="margin-top: 10px">
-                    <div class="col-md-5 col-lg-5 col-xl-5">
-                        <h1 class="fw-bold mb-0 text-black">Order Details</h1>
-                    </div>
-                    <div class="col-md-3 col-lg-3 col-xl-3">
-                        <form method="post" action="{% url 'send' order.id %}">
-                            {% csrf_token %}
-                            {% if messages %}
-                                <ul class="messages">
-                                    {% for message in messages %}
-                                    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                            <input type="text" name="tracking">
-                            <button type="submit" class="btn btn-primary add-button" style="margin-top: 10px; margin-left: 35px;">
-                                    <input type="hidden" name="operation" value="order_status">
-                                Sending
-                            </button>
-                        </form>
-                    </div>
+        <div class="bg-light-grey my-padding my-margin" style="border-radius: 15px; padding: 20px 20px 20px 20px">
+            <div class="row mb-4 d-flex justify-content-between align-items-center" style="margin-top: 10px">
+                <div class="col-md-5 col-lg-5 col-xl-5">
+                    <h1 class="fw-bold mb-0 text-black">Order Details</h1>
                 </div>
-                <hr>
-                <div class="progress-track">
-                    <ul id="progressbar">
-                        <li class="step0 active" id="step1">Ordered</li>
-                        {% if order.delivery.get.status == 'Ordered' %}
-                            <li class="step0 text-center" id="step2">On the way</li>
-                            <li class="step0 text-right" id="step3">Delivered</li>
-                        {% elif order.delivery.get.status == 'Sent' %}
-                            <li class="step0 active text-center" id="step2">On the way</li>
-                            <li class="step0 text-right" id="step3">Delivered</li>
-                        {% elif order.delivery.get.status == 'Delivered' %}
-                            <li class="step0 active text-center" id="step2">On the way</li>
-                            <li class="step0 active text-right" id="step3">Delivered</li>
+                <div class="col-md-3 col-lg-3 col-xl-3">
+                    <form method="post" action="{% url 'send' order.id %}">
+                        {% csrf_token %}
+                        {% if messages %}
+                            <ul class="messages">
+                                {% for message in messages %}
+                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                                {% endfor %}
+                            </ul>
                         {% endif %}
-                    </ul>
+                        <input type="text" name="tracking">
+                        <button type="submit" class="btn btn-primary add-button" style="margin-top: 10px; margin-left: 35px;">
+                                <input type="hidden" name="operation" value="order_status">
+                            Sending
+                        </button>
+                    </form>
                 </div>
+            </div>
+            <hr>
+            <div class="progress-track">
+                <ul id="progressbar">
+                    <li class="step0 active" id="step1">Ordered</li>
+                    {% if order.delivery.get.status == 'Ordered' %}
+                        <li class="step0 text-center" id="step2">On the way</li>
+                        <li class="step0 text-right" id="step3">Delivered</li>
+                    {% elif order.delivery.get.status == 'Sent' %}
+                        <li class="step0 active text-center" id="step2">On the way</li>
+                        <li class="step0 text-right" id="step3">Delivered</li>
+                    {% elif order.delivery.get.status == 'Delivered' %}
+                        <li class="step0 active text-center" id="step2">On the way</li>
+                        <li class="step0 active text-right" id="step3">Delivered</li>
+                    {% endif %}
+                </ul>
+            </div>
+            {% for item in order.items_in_order.all %}
+              {% if item.product.user.id == logged_user %}
                   {% for img in main_images %}
                     {% if item.product.id == img.product.id %}
                       <hr class="my-4">
@@ -65,16 +66,17 @@
                       </div>
                     {% endif %}
                   {% endfor %}
+              {% endif %}
+            {% endfor %}
 
-                <h3>Address to shipping</h3>
-                <hr>
-                <h6 style="margin-bottom: 10px"><p style="color: gray">Name and Surname:</p>
-                    {{ user_address.name }} {{ user_address.surname }}</h6>
-                <h6 style="margin-bottom: 10px"><p style="color: gray">Street:</p>{{ user_address.street }}</h6>
-                <h6 style="margin-bottom: 10px"><p style="color: gray">Locality:</p>
-                    {{ user_address.zip_code }} {{ user_address.locality }}</h6>
-                <h6 style="margin-bottom: 10px"><p style="color: gray">Phone:</p>{{ user_address.phone }}</h6>
-            </div>
-        {% endfor %}
+            <h3>Address to shipping</h3>
+            <hr>
+            <h6 style="margin-bottom: 10px"><p style="color: gray">Name and Surname:</p>
+                {{ user_address.name }} {{ user_address.surname }}</h6>
+            <h6 style="margin-bottom: 10px"><p style="color: gray">Street:</p>{{ user_address.street }}</h6>
+            <h6 style="margin-bottom: 10px"><p style="color: gray">Locality:</p>
+                {{ user_address.zip_code }} {{ user_address.locality }}</h6>
+            <h6 style="margin-bottom: 10px"><p style="color: gray">Phone:</p>{{ user_address.phone }}</h6>
+        </div>
     </main>
 {% endblock %}

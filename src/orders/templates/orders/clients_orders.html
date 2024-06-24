@@ -6,8 +6,6 @@
             <h1 class="fw-bold mb-0 text-black">Clients Orders</h1>
         </div>
         {% for order in all_orders %}
-            {% for item in order.items_in_order.all %}
-            {% if logged_user == item.product.user.id %}
             <div class="bg-light-grey my-padding my-margin" style="border-radius: 15px; padding: 20px 20px 20px 20px; margin-bottom: 20px">
                 <div class="row mb-4 d-flex justify-content-between align-items-center" style="margin-top: 10px">
                     <div class="col-md-5 col-lg-5 col-xl-5">
@@ -19,31 +17,33 @@
                 </div>
                 <hr>
               {% for item in order.items_in_order.all %}
-                  {% for img in main_images %}
-                      {% if item.product.id == img.product.id %}
-                            From: {{ item.product.user.username }}
-                          <div class="row mb-4 d-flex justify-content-between align-items-center" style="margin-top: 10px">
+                  {% if item.product.user.id == logged_user %}
+                      {% for img in main_images %}
+                          {% if item.product.id == img.product.id %}
+                                From: {{ item.product.user.username }}
+                              <div class="row mb-4 d-flex justify-content-between align-items-center" style="margin-top: 10px">
 
-                            <div class="col-md-2 col-lg-2 col-xl-2">
-                              <img
-                                src="{{ img.image.url }}"
-                                class="img-fluid rounded-3 img-size" alt="#">
-                            </div>
-                            <div class="col-md-3 col-lg-3 col-xl-3">
-                              <h5 class="title">
-                                <a class="text-black mb-0" href="">{{ item.product.title }}</a>
-                              </h5>
-                            </div>
-                              <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                                  {{ item.quantity }} x {{ item.product.price }}
+                                <div class="col-md-2 col-lg-2 col-xl-2">
+                                  <img
+                                    src="{{ img.image.url }}"
+                                    class="img-fluid rounded-3 img-size" alt="#">
+                                </div>
+                                <div class="col-md-3 col-lg-3 col-xl-3">
+                                  <h5 class="title">
+                                    <a class="text-black mb-0" href="">{{ item.product.title }}</a>
+                                  </h5>
+                                </div>
+                                  <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                      {{ item.quantity }} x {{ item.product.price }}
+                                  </div>
+                                <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                                    <h6 class="mb-0" id="product">{{ item.sum_one_item }}</h6>
+                                </div>
                               </div>
-                            <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                <h6 class="mb-0" id="product">{{ item.sum_one_item }}</h6>
-                            </div>
-                          </div>
-                          <hr>
-                      {% endif %}
-                  {% endfor %}
+                              <hr>
+                          {% endif %}
+                      {% endfor %}
+                  {% endif %}
               {% endfor %}
                 <div class="row mb-4 d-flex justify-content-between align-items-center">
                     {% for delivery in order.delivery.all %}
@@ -68,8 +68,6 @@
                     <a href="{% url 'order-client-details' order.id %}">Details Shopping</a>
                 </div>
             </div>
-            {% endif %}
-                {% endfor %}
         {% endfor %}
     </main>
 {% endblock %}
