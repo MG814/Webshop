@@ -17,6 +17,7 @@ from products.forms import ProductForm, EditForm
 from products.models import Image, Product, Review, Wishlist, WishlistItem
 from shop.models import Cart
 from shop.mixins import ExtraContextMixin
+from users.models import User
 
 
 class UserProductsPageView(ExtraContextMixin, TemplateView):
@@ -24,6 +25,16 @@ class UserProductsPageView(ExtraContextMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        return context
+
+
+class SellerProductsPageView(ExtraContextMixin, TemplateView):
+    template_name = "products/seller_products.html"
+
+    def get_context_data(self, pk=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        seller = User.objects.get(pk=pk)
+        context['seller'] = seller
         return context
 
 
@@ -102,7 +113,7 @@ class DeleteProductView(ExtraContextMixin, LoginRequiredMixin, UserPassesTestMix
         return self.request.user == product.user
 
 
-class ReviewProduct(View):
+class ReviewProduct(View, LoginRequiredMixin):
     def post(self, request, pk):
         review = int(request.POST.get("star_rating"))
         product = get_object_or_404(Product, pk=pk)
@@ -120,7 +131,7 @@ class ReviewProduct(View):
         return redirect("product-detail", product.id)
 
 
-class WishlistView(ExtraContextMixin, ListView):
+class WishlistView(ExtraContextMixin, ListView, LoginRequiredMixin):
     model = Wishlist
     template_name = "products/wishlist.html"
 
@@ -129,12 +140,12 @@ class WishlistView(ExtraContextMixin, ListView):
         return context
 
 
-class DeleteWishlistProductView(DeleteView):
+class DeleteWishlistProductView(DeleteView, LoginRequiredMixin):
     model = WishlistItem
     success_url = reverse_lazy("wishlist")
 
 
-class AddToWishList(View):
+class AddToWishList(View, LoginRequiredMixin):
     def post(self, request, *args, **kwargs):
         user = request.user.id
         pr_id = kwargs.get('pk')

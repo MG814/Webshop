@@ -1,0 +1,57 @@
+{% extends 'shop/base.html' %}
+{% block content %}
+    <!-- Start Trending Product Area -->
+    <section class="trending-product section" style="margin-top: 12px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="section-title">
+                        <img class="rounded-circle account-img img-position img-block" src="{{ user.profile.image.url }}" alt="#">
+                        <h2 style="margin-top: 20px;">Products From {{ seller }}</h2>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                {% for product in products %}
+                    {% if product.user.id == seller.id %}
+                        <div class="col-lg-3 col-md-6 col-12">
+                        <!-- Start Single Product -->
+                            <div class="single-product">
+                                {% for img in main_images %}
+                                    {% if img.product.id == product.id %}
+                                        <div class="product-image">
+                                            <img src="{{ img.image.url }}" class="rounded-3"  alt="#" width="300" height="300">
+                                                {% if user.is_authenticated %}
+                                                    <form method="post" action="{% url 'cart-product-add'  product.id %}">
+                                                        {% csrf_token %}
+                                                        <button class="button btn rounded-3" type="submit">
+                                                            <a class="btn" style="color: white;"><i class="lni lni-cart"></i> Add to Cart</a>
+                                                        </button>
+                                                    </form>
+                                                {% endif %}
+                                        </div>
+                                    {% endif %}
+                                {% endfor %}
+                                <div class="product-info">
+                                    <span class="category">{{ product.category }}</span>
+                                    <h4 class="title">
+                                        <a href="{% url 'product-detail' product.id %}">{{ product.title }}</a>
+                                    </h4>
+                                    <ul class="review">
+                                        {% for _ in product.stars %}<i class="lni lni-star-filled"></i>{% endfor %}
+                                        {% for _ in product.empty_stars %}<i class="lni lni-star"></i>{% endfor %}
+                                    </ul>
+                                    <div class="price">
+                                        <span>{{ product.price }}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- End Single Product -->
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+    <!-- End Trending Product Area -->
+{% endblock %}
