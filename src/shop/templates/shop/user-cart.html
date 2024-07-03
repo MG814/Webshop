@@ -18,7 +18,6 @@
                                             {% for img in main_images %}
                                                 {% if item.product.id == img.product.id %}
                                                     <hr class="my-4">
-                                                    ID : {{ item.product.id }}
                                                     <div class="row mb-4 d-flex justify-content-between align-items-center">
                                                         <div class="col-md-2 col-lg-2 col-xl-2">
                                                             <img src="{{ img.image.url }}"
@@ -53,7 +52,7 @@
                                                             </form>
                                                         </div>
                                                         <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                                                            <h6 class="mb-0">{{ item.product.price }}</h6>
+                                                            <h6 class="mb-0">{{ item.discounted_price }}</h6>
                                                         </div>
                                                         <div class="col-md-1 col-lg-1 col-xl-1 text-end">
                                                             <form method="POST" action="{% url 'cart-product-delete' item.id %}">
@@ -85,13 +84,21 @@
                                             <h5 class="text-uppercase">{{ user_cart.items_in_cart.count }} items</h5>
                                             <h5>{{ sum_price }}</h5>
                                         </div>
-                                        <h5 class="text-uppercase mb-3">Give code</h5>
+                                        <form method="post" action="{% url 'cart-activate-code' %}">
+                                            {% csrf_token %}
+                                        <h5 class="text-uppercase mb-3">Discount Code</h5>
                                         <div class="mb-5">
                                             <div class="form-outline">
-                                                <input type="text" id="form3Examplea2" class="form-control form-control-lg" />
-                                                <label class="form-label" for="form3Examplea2">Enter your code</label>
+                                                <input type="text" class="form-control form-control-lg" name="code"/>
+                                                <label class="form-label">Enter your code</label>
                                             </div>
+                                            <button style="padding: 5px 30px"
+                                                type="submit"
+                                                class="btn btn-primary btn-block btn-lg"
+                                                data-mdb-ripple-color="dark">
+                                                Active code</button>
                                         </div>
+                                        </form>
                                         <form method="post" action={{ site }}>
                                             {% csrf_token %}
                                             <div style="border: solid;

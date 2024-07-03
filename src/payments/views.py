@@ -66,6 +66,7 @@ def notify_stripe_view(request):
             payload, sig_header, settings.ENDPOINT_SECRET
         )
     except ValueError:
+        logging.error('ValueError')
         # Invalid payload
         return HttpResponse(status=400)
     except stripe.error.SignatureVerificationError:
@@ -73,32 +74,41 @@ def notify_stripe_view(request):
         # Invalid signature
         return HttpResponse(status=400)
 
-    # Handle the checkout.session.completed event
-    if event["type"] == "checkout.session.completed":
-        # Retrieve the session. If you require line items in the response, you may include them by expanding line_items.
-        session = stripe.checkout.Session.retrieve(
-            event["data"]["object"]["id"],
-            expand=["line_items"],
-        )
+    try:
+        # Handle the checkout.session.completed event
+        if event["type"] == "checkout.session.completed":
+            # Retrieve the session. If you require line items in the response, you may include them by expanding line_items.
+            session = stripe.checkout.Session.retrieve(
+                event["data"]["object"]["id"],
+                expand=["line_items"],
+            )
 
-        line_items = session.line_items
-        price = line_items.get("data")[0].get("price")
-        product = price.get("product")
-        metadata = stripe.Product.retrieve(product).get("metadata")
-        seller_id = metadata.get("seller_id")
-        buyer_id = metadata.get("buyer_id")
-        cart = get_user_cart(buyer_id)
-        price_amount = metadata.get("shipping_price")
+            line_items = session.line_items
+            price = line_items.get("data")[0].get("price")
+            product = price.get("product")
+            metadata = stripe.Product.retrieve(product).get("metadata")
+            seller_id = metadata.get("seller_id")
+            buyer_id = metadata.get("buyer_id")
+            cart = get_user_cart(buyer_id)
+            price_amount = metadata.get("shipping_price")
 
-        order = create_new_order(buyer_id, seller_id, cart, price_amount)
-        create_new_delivery(metadata.get("shipping_name"), price_amount, order.id)
-        transfer_items_from_cart_to_order(cart, order)
+            order = create_new_order(buyer_id, seller_id, cart, price_amount)
+            create_new_delivery(metadata.get("shipping_name"), price_amount, order.id)
+            transfer_items_from_cart_to_order(cart, order)
+    except:
+        logging.error('CheckoutSessionIncomplete')
 
-    if event["type"] == 'charge.updated':
-        charge = stripe.Charge.retrieve(
-            event["data"]["object"]["id"],
-        )
-        buyer_email = stripe.Customer.list().get('data')[0].get('email')
-        send_email(receipt_url=charge.get('receipt_url'), buyer_email=buyer_email)
+    try:
+        if event["type"] == 'charge.updated':
+            charge = stripe.Charge.retrieve(
+                event["data"]["object"]["id"],
+            )
+            buyer_email = stripe.Customer.list().get('data')[0].get('email')
+            try:
+                send_email(receipt_url=charge.get('receipt_url'), buyer_email=buyer_email)
+            except:
+                logging.error('EmailNotSent')
+    except:
+        logging.error('ChargeNotUpdated')
 
     return HttpResponse(status=200)

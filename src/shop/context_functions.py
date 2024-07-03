@@ -26,7 +26,7 @@ def summary_price(user_id):
     total_sum = decimal("0")
 
     for product_in_cart in cart.items_in_cart.all():
-        total_sum += product_in_cart.product.price * product_in_cart.quantity
+        total_sum += product_in_cart.discounted_price * product_in_cart.quantity
 
     return total_sum
 
