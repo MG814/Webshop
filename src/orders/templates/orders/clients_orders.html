@@ -6,18 +6,18 @@
             <h1 class="fw-bold mb-0 text-black">Clients Orders</h1>
         </div>
         {% for order in all_orders %}
-            <div class="bg-light-grey my-padding my-margin" style="border-radius: 15px; padding: 20px 20px 20px 20px; margin-bottom: 20px">
-                <div class="row mb-4 d-flex justify-content-between align-items-center" style="margin-top: 10px">
-                    <div class="col-md-5 col-lg-5 col-xl-5">
-                        {{ order.created_at }}
+            {% if order.seller.id == logged_user %}
+                <div class="bg-light-grey my-padding my-margin" style="border-radius: 15px; padding: 20px 20px 20px 20px; margin-bottom: 20px">
+                    <div class="row mb-4 d-flex justify-content-between align-items-center" style="margin-top: 10px">
+                        <div class="col-md-5 col-lg-5 col-xl-5">
+                            {{ order.created_at }}
+                        </div>
+                        <div class="col-md-4 col-lg-4 col-xl-4">
+                            Tracking number: {{ order.tracking_number }}
+                        </div>
                     </div>
-                    <div class="col-md-4 col-lg-4 col-xl-4">
-                        Tracking number: {{ order.tracking_number }}
-                    </div>
-                </div>
-                <hr>
-              {% for item in order.items_in_order.all %}
-                  {% if item.product.user.id == logged_user %}
+                    <hr>
+                  {% for item in order.items_in_order.all %}
                       {% for img in main_images %}
                           {% if item.product.id == img.product.id %}
                                 From: {{ item.product.user.username }}
@@ -34,7 +34,7 @@
                                   </h5>
                                 </div>
                                   <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                                      {{ item.quantity }} x {{ item.product.price }}
+                                      {{ item.quantity }} x {{ item.discounted_price }}
                                   </div>
                                 <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
                                     <h6 class="mb-0" id="product">{{ item.sum_one_item }}</h6>
@@ -43,31 +43,31 @@
                               <hr>
                           {% endif %}
                       {% endfor %}
-                  {% endif %}
-              {% endfor %}
-                <div class="row mb-4 d-flex justify-content-between align-items-center">
-                    {% for delivery in order.delivery.all %}
-                        <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                            Shipping cost
-                        </div>
-                        <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
-                            {{ delivery.price }}
-                        </div>
-                    {% endfor %}
-                </div>
-                <hr>
-                <div class="row mb-4 d-flex justify-content-between align-items-center">
-                    <div class="col-md-3 col-lg-3 col-xl-3">
-                        <h5><a>With shipping</a></h5>
+                  {% endfor %}
+                    <div class="row mb-4 d-flex justify-content-between align-items-center">
+                        {% for delivery in order.delivery.all %}
+                            <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                Shipping cost
+                            </div>
+                            <div class="col-md-3 col-lg-3 col-xl-2 d-flex">
+                                {{ delivery.price }}
+                            </div>
+                        {% endfor %}
                     </div>
-                    <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
-                        <h5>{{ order.price_with_shipping }}<a id="total_price"></a></h5>
+                    <hr>
+                    <div class="row mb-4 d-flex justify-content-between align-items-center">
+                        <div class="col-md-3 col-lg-3 col-xl-3">
+                            <h5><a>With shipping</a></h5>
+                        </div>
+                        <div class="col-md-3 col-lg-2 col-xl-2 offset-lg-1">
+                            <h5>{{ order.price_with_shipping }}<a id="total_price"></a></h5>
+                        </div>
+                    </div>
+                    <div style="text-align: center">
+                        <a href="{% url 'order-client-details' order.id %}">Details Shopping</a>
                     </div>
                 </div>
-                <div style="text-align: center">
-                    <a href="{% url 'order-client-details' order.id %}">Details Shopping</a>
-                </div>
-            </div>
+            {% endif %}
         {% endfor %}
     </main>
 {% endblock %}

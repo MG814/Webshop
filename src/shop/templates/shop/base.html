@@ -66,13 +66,13 @@
                             {% if user.is_authenticated %}
                                 <ul class="user-login">
                                 <select onchange="location = this.value;" class="form-select bg-transparent" style="color: white" aria-label="Default select example">
-                                    <option style="color: black" selected value="1"><a>Hello {{ user.username }}</a></option>
-                                    <option style="color: black" value="{% url 'profile' %}"><a>Account</a></option>
-                                  <option style="color: black" value="{% url 'product-add' %}"><a>Add product</a></option>
-                                  <option style="color: black" value="{% url 'product-user' %}"><a>My products</a></option>
+                                  <option style="color: black" selected value="1"><a>Hello {{ user.username }}</a></option>
+                                  <option style="color: black" value="{% url 'profile' %}"><a>Account</a></option>
                                   <option style="color: black" value="{% url 'order' %}"><a>My orders</a></option>
                                   {% if user.role == 'Seller' %}
                                     <option style="color: black" value="{% url 'order-client' %}"><a>Clients orders</a></option>
+                                    <option style="color: black" value="{% url 'product-add' %}"><a>Add product</a></option>
+                                    <option style="color: black" value="{% url 'product-user' %}"><a>My products</a></option>
                                   {% endif %}
                                   <option style="color: black" value="{% url 'logout' %}"><a>Sign Out</a></option>
                                 </select>
@@ -169,7 +169,7 @@
                                                         </div>
                                                         <div class="content">
                                                             <h4><a href="{% url 'product-detail' item.product.id %}">{{ item.product.title }}</a></h4>
-                                                            <p class="quantity">{{ item.quantity }}x - <span class="amount">{{ item.product.price }}</span></p>
+                                                            <p class="quantity">{{ item.quantity }}x - <span class="amount">{{ item.discounted_price}}</span></p>
                                                         </div>
                                                     </li>
                                                 </ul>

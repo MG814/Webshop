@@ -1,3 +1,4 @@
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from djmoney.models.fields import MoneyField
 from django.conf import settings
@@ -38,6 +39,17 @@ class Product(models.Model):
     created_at = models.DateTimeField(
         auto_created=True,
         auto_now=True,
+    )
+    discount_code = models.CharField(
+        max_length=50,
+        blank=True,
+    )
+    discount_percent = models.IntegerField(
+        default=0,
+        validators=[
+            MaxValueValidator(100),
+            MinValueValidator(0)
+        ],
     )
 
     @property

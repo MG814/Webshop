@@ -1,6 +1,8 @@
+import logging
 import uuid
 
 from django.forms import ModelForm
+from django.http import HttpResponse
 from multiupload.fields import MultiFileField
 
 from .models import Image, Product
@@ -57,16 +59,19 @@ class ProductForm(ModelForm):
         self.fields["files"].widget.attrs.update({"class": "form-control-file"})
 
     def save(self, *args, **kwargs):
-        instance = super(ProductForm, self).save()
-        create_images_via_form(self.cleaned_data, instance)
-
-        return instance
+        try:
+            instance = super(ProductForm, self).save()
+            create_images_via_form(self.cleaned_data, instance)
+            return instance
+        except ValueError:
+            logging.error('Value Error - product descryption')
+            return HttpResponse(status=400)
 
 
 class EditForm(ModelForm):
     class Meta:
         model = Product
-        fields = ["title", "description", "price", "category"]
+        fields = ["title", "description", "price", "category", 'discount_code', 'discount_percent']
 
     files = MultiFileField(min_num=1, max_num=3, max_file_size=1024 * 1024 * 5)
 
@@ -83,6 +88,12 @@ class EditForm(ModelForm):
         ] = "width:200px; height:40px; margin-bottom: 20px;"
         self.fields["category"].widget.attrs.update({"class": "form-control"})
         self.fields["category"].widget.attrs[
+            "style"
+        ] = "width:200px; height:40px; margin-bottom: 20px;"
+        self.fields["discount_code"].widget.attrs.update({"class": "form-control"})
+        self.fields["discount_code"].widget.attrs["style"] = "width:400px; height:40px;"
+        self.fields["discount_percent"].widget.attrs.update({"class": "form-control"})
+        self.fields["discount_percent"].widget.attrs[
             "style"
         ] = "width:200px; height:40px; margin-bottom: 20px;"
         self.fields["files"].widget.attrs.update({"class": "form-control-file"})

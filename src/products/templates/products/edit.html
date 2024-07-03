@@ -16,7 +16,7 @@
                                 <!-- Start Single Product -->
                                     <div class="single-product">
                                         <div class="product-image">
-                                            <img src="{{ img.image.url }}" class="rounded-3" alt="#" height="200px">
+                                            <img src="{{ img.image.url }}" class="img" alt="#" width="300" height="150">
                                             {% if images.count > 1 %}
                                             <div class="button">
                                                 <a href="{% url 'product-image-delete' img.product.id img.id  %}" class="btn">Delete</a>

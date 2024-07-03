@@ -14,7 +14,7 @@ def _create_line_items(items_in_cart: list[Item], shipping_name: str, shipping_p
             "price_data": {
                 "currency": "usd",
                 "unit_amount": int(
-                    float(item_in_cart.product.price.amount) * 100.00
+                    float(item_in_cart.discounted_price.amount) * 100.00
                 ),
                 "product_data": {
                     "name": item_in_cart.product.title,

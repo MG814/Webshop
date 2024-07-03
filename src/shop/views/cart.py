@@ -1,6 +1,6 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.utils.safestring import mark_safe
 from django.views import View
 from django.views.generic import ListView, DeleteView
 
@@ -11,7 +11,19 @@ from users.models import Address
 from django.contrib import messages
 
 
-class CartUserView(ExtraContextMixin, ListView):
+class ActivateDiscountCode(LoginRequiredMixin, View):
+    def post(self, request):
+        discount_code = request.POST.get('code')
+        cart = Cart.objects.filter(user_id=request.user.id)[0]
+        items_in_cart = cart.items_in_cart.all()
+        for item in items_in_cart:
+            if item.product.discount_code == discount_code:
+                item.discounted_price = item.product.price - item.product.price * item.product.discount_percent/100
+                item.save()
+        return redirect("cart")
+
+
+class CartUserView(ExtraContextMixin, LoginRequiredMixin, ListView):
     model = Cart
     template_name = 'shop/user-cart.html'
 
@@ -22,7 +34,7 @@ class CartUserView(ExtraContextMixin, ListView):
         address = Address.objects.filter(user_id=user)
 
         if address.count() == 0:
-            context['site'] = reverse_lazy('address')
+            context['site'] = reverse_lazy('address-add')
         else:
             context['site'] = reverse_lazy('create-checkout-session')
 
@@ -35,12 +47,12 @@ class CartUserView(ExtraContextMixin, ListView):
         return context
 
 
-class DeleteCartProductView(DeleteView):
+class DeleteCartProductView(DeleteView, LoginRequiredMixin):
     model = Item
     success_url = reverse_lazy("cart")
 
 
-class AddToCart(View):
+class AddToCart(View, LoginRequiredMixin):
     def post(self, request, *args, **kwargs):
         user = request.user.id
         pr_id = kwargs.get('pk')
@@ -58,7 +70,8 @@ class AddToCart(View):
 
         if seller_id == seller_id_cart_item:
             if product_id not in product_id_list:
-                new_item_in_cart = Item(product_id=product_id, cart_id=cart_id)
+                price = Product.objects.filter(id=product_id).values('price')[0].get('price')
+                new_item_in_cart = Item(product_id=product_id, cart_id=cart_id, discounted_price=price)
                 new_item_in_cart.save()
             return redirect("cart")
         else:
@@ -66,7 +79,7 @@ class AddToCart(View):
             return redirect("home")
 
 
-class ChangeQuantity(View):
+class ChangeQuantity(View, LoginRequiredMixin):
     def post(self, request):
         product_id_from = request.POST.get("product_id")
         operation = request.POST.get("operation")
