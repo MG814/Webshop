@@ -201,3 +201,16 @@ CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Europe/Warsaw'
 CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+import sentry_sdk
+
+sentry_sdk.init(
+    dsn="https://4e00b8bdd9d808da250ca3402fae205b@o4507471750627328.ingest.de.sentry.io/4507471778218064",
+    # Set traces_sample_rate to 1.0 to capture 100%
+    # of transactions for performance monitoring.
+    traces_sample_rate=1.0,
+    # Set profiles_sample_rate to 1.0 to profile 100%
+    # of sampled transactions.
+    # We recommend adjusting this value in production.
+    profiles_sample_rate=1.0,
+)
