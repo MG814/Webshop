@@ -105,7 +105,7 @@ def notify_stripe_view(request):
             )
             buyer_email = stripe.Customer.list().get('data')[0].get('email')
             try:
-                send_email(receipt_url=charge.get('receipt_url'), buyer_email=buyer_email)
+                send_email.delay(receipt_url=charge.get('receipt_url'), buyer_email=buyer_email)
             except:
                 logging.error('EmailNotSent')
     except:

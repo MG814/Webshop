@@ -7,14 +7,14 @@ services:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     env_file:
-      - .env
+      - src/.env
     ports:
       - "5432:5432"
   web:
     build: .
-    command: python manage.py runserver 0.0.0.0:8002
+    command: python src/manage.py runserver 0.0.0.0:8002
     volumes:
-      - .:/code/
+      - ./src:/app/src
     ports:
       - "8002:8002"
     depends_on:
@@ -29,6 +29,22 @@ services:
       - elasticsearch-data:/usr/share/elasticsearch/data
     ports:
       - "9200:9200"
+  worker:
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile_worker
+    environment:
+      DEBUG: "True"
+      CELERY_BROKER_URL: "redis://redis:6379/0"
+    depends_on:
+      - web
+      - redis
+  redis:
+    restart: unless-stopped
+    image: redis:7.0.5-alpine
+    expose:
+      - 6379
 volumes:
   db:
   elasticsearch-data:

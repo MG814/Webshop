@@ -1,6 +1,7 @@
 import environ
 import os
 from pathlib import Path
+import sentry_sdk
 
 from .env import env
 
@@ -193,16 +194,13 @@ DEFAULT_EMAIL = 'wenomus@gmail.com'
 
 # CELERY SETTINGS
 # celery broker and result
-CELERY_BROKER_URL = "redis://localhost:6379"
-# CELERY_RESULT_BACKEND = "redis://localhost:6379"
-# CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
 CELERY_ACCEPT_CONTENT = {'application/json'}
 CELERY_RESULT_SERIALIZER = 'json'
 CELERY_TASK_SERIALIZER = 'json'
 CELERY_TIMEZONE = 'Europe/Warsaw'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-
-import sentry_sdk
+CELERY_BROKER_URL = os.environ.get("BROKER_URL", "redis://redis:6379/0")
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_CACHE_BACKEND = 'django-cache'
 
 sentry_sdk.init(
     dsn="https://4e00b8bdd9d808da250ca3402fae205b@o4507471750627328.ingest.de.sentry.io/4507471778218064",
