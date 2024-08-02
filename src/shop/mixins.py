@@ -25,13 +25,16 @@ class ExtraContextMixin:
 
     def __get_authorized_user_additional_context(self, context) -> Dict[str, Any]:
         user = self.request.user.id
+        user_cart = get_user_cart(user)
         context["logged_user"] = user
 
         context["sum_price"] = summary_price(user)
         context["user_address"] = get_user_address(user)
 
         context["user_orders"] = get_orders(user).order_by("-created_at")
-        context["user_cart"] = get_user_cart(user)
+        context['user_cart'] = get_user_cart(user)
+        context["user_cart_items"] = user_cart.items_in_cart.all().order_by('-id')
+        context['user_cart_count'] = user_cart.items_in_cart.count
         context['wishlist'] = get_wishlist(user)
 
         return context

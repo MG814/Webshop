@@ -12,9 +12,9 @@
                                     <div class="p-5">
                                         <div class="d-flex justify-content-between align-items-center mb-5">
                                             <h1 class="fw-bold mb-0 text-black">Shopping Cart</h1>
-                                            <h6 class="mb-0 text-muted">{{ user_cart.items_in_cart.count }} items</h6>
+                                            <h6 class="mb-0 text-muted">{{ user_cart_count }} items</h6>
                                         </div>
-                                        {% for item in user_cart.items_in_cart.all %}
+                                        {% for item in user_cart_items %}
                                             {% for img in main_images %}
                                                 {% if item.product.id == img.product.id %}
                                                     <hr class="my-4">
@@ -81,7 +81,7 @@
                                         <h3 class="fw-bold mb-5 mt-2 pt-1">Summary</h3>
                                         <hr class="my-4">
                                         <div class="d-flex justify-content-between mb-4">
-                                            <h5 class="text-uppercase">{{ user_cart.items_in_cart.count }} items</h5>
+                                            <h5 class="text-uppercase">{{ user_cart_count }} items</h5>
                                             <h5>{{ sum_price }}</h5>
                                         </div>
                                         <form method="post" action="{% url 'cart-activate-code' %}">
