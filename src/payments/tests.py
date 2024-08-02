@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.test import tag
 from django.core import mail
 
-from core.settings import DEFAULT_EMAIL, DEFAULT_CLIENT_EMAIL
+from core.settings import DEFAULT_EMAIL
 
 from orders.factory_models import UserFactory, CartFactory, OrderFactory, ItemFactory
 from orders.models import Order, Delivery
@@ -43,7 +43,8 @@ class TestPaymentsFunctions(TestCase):
         self.assertEqual(self.order.items_in_order.count(), 1)
 
     def test_send_email(self):
-        send_email('test.com')
+        DEFAULT_CLIENT_EMAIL = 'test@gmail.com'
+        send_email('test.com', DEFAULT_CLIENT_EMAIL)
         first_message = mail.outbox[0]
 
         self.assertEqual(first_message.subject, 'GridShop: Successful Payment')
