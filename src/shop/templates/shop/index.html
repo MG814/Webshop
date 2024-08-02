@@ -80,12 +80,14 @@
                                              alt="#"
                                              width="300"
                                              height="300">
-                                        <form method="post" action="{% url 'cart-product-add'  product.id %}">
-                                            {% csrf_token %}
-                                            <button class="button btn rounded-3" type="submit">
-                                                <a class="btn" style="color: white;"><i class="lni lni-cart"></i> Add to Cart</a>
-                                            </button>
-                                        </form>
+                                        {% if user.is_authenticated %}
+                                            <form method="post" action="{% url 'cart-product-add'  product.id %}">
+                                                {% csrf_token %}
+                                                <button class="button btn rounded-3" type="submit">
+                                                    <a class="btn" style="color: white;"><i class="lni lni-cart"></i> Add to Cart</a>
+                                                </button>
+                                            </form>
+                                        {% endif %}
                                     </div>
                                 {% endif %}
                             {% endfor %}
@@ -94,6 +96,9 @@
                                 <h4 class="title">
                                     <a href="{% url 'product-detail' product.id %}">{{ product.title }}</a>
                                 </h4>
+                                <p class="category">
+                                    <a href="{% url 'product-seller' product.user.id %}">From: {{ product.user }}</a>
+                                </p>
                                 <ul class="review">
                                     {% for _ in product.stars %}<i class="lni lni-star-filled"></i>{% endfor %}
                                     {% for _ in product.empty_stars %}<i class="lni lni-star"></i>{% endfor %}

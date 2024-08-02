@@ -50,7 +50,7 @@ class ProfileView(ExtraContextMixin, LoginRequiredMixin, TemplateView):
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
-            messages.success(request, "Your profile's been updated!")
+            messages.success(request, "Your profile has been updated!")
             return redirect("profile")
 
         return render(
@@ -60,7 +60,7 @@ class ProfileView(ExtraContextMixin, LoginRequiredMixin, TemplateView):
         )
 
 
-class AddressView(LoginRequiredMixin, CreateView):
+class AddressView(ExtraContextMixin, LoginRequiredMixin, CreateView):
     model = Address
     form_class = AddressForm
     template_name = "users/address/address_add.html"
@@ -71,7 +71,7 @@ class AddressView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class AddressEditView(LoginRequiredMixin, UpdateView):
+class AddressEditView(ExtraContextMixin, LoginRequiredMixin, UpdateView):
     model = Address
     form_class = AddressEditForm
     template_name = "users/address/address_edit.html"
