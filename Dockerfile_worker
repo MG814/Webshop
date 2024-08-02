@@ -1,0 +1,16 @@
+FROM python:3.10-slim
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE 1
+
+WORKDIR /app
+
+COPY src/requirements.txt /app/
+
+RUN pip install -r requirements.txt
+
+COPY . /app
+
+RUN chmod +x /app/worker-entrypoint.sh
+
+
+ENTRYPOINT ["/app/worker-entrypoint.sh"]
