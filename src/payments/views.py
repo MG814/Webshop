@@ -50,9 +50,6 @@ class CreateCheckoutSessionView(ExtraContextMixin, View):
             success_url=YOUR_DOMAIN + "/orders/",
             cancel_url=YOUR_DOMAIN + "",
         )
-        print("+++++++++++++++++++++++++++++++++++")
-        print(checkout_session.url)
-        print("+++++++++++++++++++++++++++++++++++")
         return redirect(checkout_session.url, code=303)
 
 
@@ -65,10 +62,6 @@ def notify_stripe_view(request):
         event = stripe.Webhook.construct_event(
             payload, sig_header, settings.ENDPOINT_SECRET
         )
-    except ValueError:
-        logging.error('ValueError')
-        # Invalid payload
-        return HttpResponse(status=400)
     except (stripe.error.StripeError, KeyError, IndexError, AttributeError, TypeError, ValueError) as e:
         logging.error(f'SignatureVerifcationError: {str(e)}')
         # Invalid signature

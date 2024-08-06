@@ -17,7 +17,7 @@ class HomePageView(ExtraContextMixin, TemplateView):
         if products.count() >= 3:
             product_count = [
                 product.get("id") for product in products
-            ]  # TODO product_count tylko z liczb, które istnieją jako id.
+            ]
             random_indices = random.sample(product_count, count)
             return Product.objects.filter(id__in=random_indices)
         else:
