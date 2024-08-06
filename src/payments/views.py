@@ -88,8 +88,8 @@ def notify_stripe_view(request):
             order = create_new_order(buyer_id, seller_id, cart, price_amount)
             create_new_delivery(metadata.get("shipping_name"), price_amount, order.id)
             transfer_items_from_cart_to_order(cart, order)
-    except:
-        logging.error('CheckoutSessionIncomplete')
+    except (stripe.error.StripeError, KeyError, IndexError, AttributeError, TypeError, ValueError) as e:
+        logging.error(f'CheckoutSessionIncomplete: {str(e)}')
 
     try:
         if event["type"] == 'charge.updated':
