@@ -69,8 +69,8 @@ def notify_stripe_view(request):
         logging.error('ValueError')
         # Invalid payload
         return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError:
-        logging.error('SignatureVerifcationError')
+    except (stripe.error.StripeError, KeyError, IndexError, AttributeError, TypeError, ValueError) as e:
+        logging.error(f'SignatureVerifcationError: {str(e)}')
         # Invalid signature
         return HttpResponse(status=400)
 
@@ -106,9 +106,9 @@ def notify_stripe_view(request):
             buyer_email = stripe.Customer.list().get('data')[0].get('email')
             try:
                 send_email.delay(receipt_url=charge.get('receipt_url'), buyer_email=buyer_email)
-            except:
-                logging.error('EmailNotSent')
-    except:
-        logging.error('ChargeNotUpdated')
+            except (KeyError, IndexError, AttributeError, TypeError, ValueError) as e:
+                logging.error(f'EmailNotSent: {str(e)}')
+    except (stripe.error.StripeError, KeyError, IndexError, AttributeError, TypeError, ValueError) as e:
+        logging.error(f'ChargeNotUpdated: {str(e)}')
 
     return HttpResponse(status=200)
