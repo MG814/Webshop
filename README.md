@@ -8,7 +8,6 @@
 * [Screenshots](#screenshots)
 * [Setup](#setup)
 * [Project status](#project-status)
-* [Room for improvement](#room-for-improvement)
 
 
 ## General information
@@ -131,7 +130,4 @@ To run the program, type:
 
 
 ## Project status
-Project is in progress
-
-
-## Room for Improvement
+Project is complete
